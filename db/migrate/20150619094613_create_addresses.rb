@@ -8,6 +8,5 @@ class CreateAddresses < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_reference :addresses, :user, index: true, foreign_key: true
   end
 end

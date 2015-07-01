@@ -10,6 +10,5 @@ class CreateCreditCards < ActiveRecord::Migration
       t.string :last_name
       t.timestamps null: false
     end
-    add_reference :credit_cards, :user, index: true, foreign_key: true
   end
 end

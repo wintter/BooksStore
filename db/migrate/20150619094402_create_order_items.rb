@@ -5,7 +5,5 @@ class CreateOrderItems < ActiveRecord::Migration
       t.integer :quantity
       t.timestamps null: false
     end
-    add_reference :order_items, :book, index: true, foreign_key: true
-    add_reference :order_items, :order, index: true, foreign_key: true
   end
 end

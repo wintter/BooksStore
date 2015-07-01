@@ -7,7 +7,5 @@ class CreateBooks < ActiveRecord::Migration
       t.integer :in_stock
       t.timestamps null: false
     end
-    add_reference :books, :author, index: true, foreign_key: true
-    add_reference :books, :category, index: true, foreign_key: true
   end
 end

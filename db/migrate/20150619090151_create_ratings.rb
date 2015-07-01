@@ -6,7 +6,5 @@ class CreateRatings < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_reference :ratings, :user, index: true, foreign_key: true
-    add_reference :ratings, :book, index: true, foreign_key: true
   end
 end
