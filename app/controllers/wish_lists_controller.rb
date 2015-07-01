@@ -23,7 +23,7 @@ class WishListsController < ApplicationController
 
   def destroy
     cur_user.books.delete(Book.find params[:id])
-    redirect_to action: 'show'
+    redirect_to action: 'show', id: cur_user.id
   end
 
 end
