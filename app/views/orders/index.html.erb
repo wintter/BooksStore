@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="col-md-12 font_size_14">
+    <br/>
+    <div class="font_opensans font_size_25">All order</div><hr><br/>
+    <% unless @items.nil? %>
+        <% @items.each do |item| %>
+            <div class="row container_profile">
+              <div class="col-md-3">
+                Total: <span class="color_slider_top font_size_20 font_weight_900">$<%= item.total_price %></span><br/>
+                <hr>
+                Status: <span class="color_slider_top"><%= item.state %></span><br/>
+                <hr>
+                Billing address: <%= item.billing_address %><br/>
+                <hr>
+                Shipping address: <%= item.shipping_address %><br/>
+                <hr>
+                Credit card: <%= item.credit_card.number %>
+              </div>
+              <div class="col-md-9">
+                <% item.order_items.each do |order_items| %>
+                    <div class="row">
+                      <%= link_to image_tag(order_items.book.image, height: '70', width: '60') %>
+                      <%= link_to order_items.book.title, order_items.book, class: 'color_black font_sie_14' %> /
+                      <span class="color_slider_top font_weight_900">$<%= order_items.book.price %></span> /
+                      quanity: <%= order_items.quantity %>
+                    </div>
+                    <hr>
+                <% end %>
+              </div>
+            </div>
+        <% end %>
+    <% else %>
+        <div class="font_opensans font_size_25">You have not order</div>
+    <% end %>
+  </div>
+</div>

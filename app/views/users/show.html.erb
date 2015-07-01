@@ -1,10 +1,16 @@
-<div class="row">
-  <aside class="span4">
-    <section>
-      <h1>
-        <%= gravatar_for @user %>
-        <%= @user.name %>
-      </h1>
-    </section>
-  </aside>
+<div class="container">
+<div class="col-md-12">
+  <% flash.each do |key, value| %>
+      <div class="alert alert-<%= key %>"><%= value %></div>
+  <% end %>
+  <div class="container_profile col-md-4 col-md-offset-4 font_size_17 text_align_center">
+    <div class="color_slider_top font_size_25 text_align_center"><i class="glyphicon glyphicon-list-alt pull-left"> </i> Account information</div>
+    <br/>
+    <%= gravatar_for @user %>
+    <%= @user.name %><br/><br/><br/>
+    Email: <%= @user.email %><br/>
+    Billing address: <%= @user.address.billing_address %> <br/>
+    Shipping address: <%= @user.address.shipping_address %> <br/><br/>
+  </div>
+</div>
 </div>

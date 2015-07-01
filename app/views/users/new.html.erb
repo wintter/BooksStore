@@ -3,7 +3,7 @@
     <div class="col-md-4 col-md-offset-4">
       <%= form_for @user, html: {class: 'font_opensans form_register'} do |f| %>
           <div class="font_opensans font_size_20 text_align_center">Sign Up</div><br/>
-          <%= render 'shared/errors' %>
+          <%= render 'shared/errors_user' %>
           <%= f.text_field :name, placeholder: 'Enter name' %>
 
           <%= f.text_field :email, placeholder: 'Enter email' %>
@@ -12,7 +12,7 @@
 
           <%= f.password_field :password_confirmation, placeholder: 'Confirm password' %>
 
-          <%= f.submit "Create my account", class: "btn btn-large btn-register" %>
+          <%= f.submit "Register", class: "btn btn-large btn-register" %>
       <% end %>
     </div>
   </div>

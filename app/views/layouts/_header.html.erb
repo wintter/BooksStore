@@ -1,37 +1,67 @@
 <div class="col-md-12">
   <div class="row padding_top_60">
     <div class="col-md-4 col-md-offset-1">
-      <%= link_to image_tag("logo.png") %>
+      <%= link_to image_tag("logo.png"), controller:'books', action:'index'  %>
     </div>
-    <div class="col-md-2 col-md-offset-4">
-      <i class="glyphicon glyphicon-shopping-cart shop_cart"></i>
+    <div class="col-md-3 col-md-offset-1">
+      <div style="font-weight:300;" class="font_size_20">
+        <%= 'Welcome to BooksStore ' << cur_user.name if login? %><br/>
+        <%= 'Account email: ' << cur_user.email if login? %>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <%= link_to raw('<i class="glyphicon glyphicon-shopping-cart shop_cart"></i>'), carts_path %>
     </div>
   </div>
 </div>
 <div class="col-md-12">
   <div class="row header-store">
-    <div class="col-md-2 col-md-offset-1 font_size_30 font_opensans font_bold color_white padding_top_20 border_cat cursor_pointer"
+    <div class="col-md-2 col-md-offset-1 font_size_28 font_opensans font_bold color_white padding_top_20 border_cat cursor_pointer category_name"
          data-toggle="dropdown" id="dLabel2">Categories
-      <i class="glyphicon glyphicon-menu-hamburger font_size_20"> </i></div>
+      <i class="glyphicon glyphicon-menu-hamburger font_size_20 padding_left_15"> </i></div>
 
+    <% if params[:controller] == 'books' && params[:action] == 'index' %>
     <ul class="dropdown-menu ul_categories font_opensans" aria-labelledby="dLabel2" style="margin-left:150px;color:black;">
       <% @categories.each do |category| %>
-          <li class="category_id"><%= link_to category.title, "#", :'data-id' => category.id %></li>
-    <% end %>
+              <li class="category_id"><%= link_to category.title, "#", :'data-id' => category.id, :'data-title' => category.title %></li>
+          <% end %>
     </ul>
+    <% end %>
 
-    <div class="col-md-6">
+       <div class="col-md-6">
       <ul class="font_opensans color_white ul_header">
-        <li><%= link_to "Home", '#' %></li>
+        <% if login? %>
+            <li><%= link_to 'My account', '#', id: 'dLabel', class: 'li_header_acc', :'data-toggle' => 'dropdown' %>
+              <span class="caret"></span>
+              <ul class="dropdown-menu" aria-labelledby="dLabel" style="margin-left:150px;color:black;">
+                <%= link_to "Profile", user_path(cur_user) %><br/>
+                <%= link_to "Settings", edit_user_path(cur_user) %><br/>
+                <%= link_to "Logout", auth_path(cur_user), method: :delete %>
+              </ul>
+            </li>
+        <% else %>
         <li><%= link_to 'My account', '#', id: 'dLabel', class: 'li_header_acc', :'data-toggle' => 'dropdown' %>
           <span class="caret"></span>
           <ul class="dropdown-menu" aria-labelledby="dLabel" style="margin-left:150px;color:black;">
             <%= link_to "Register", new_user_path %><br/>
-            <%= link_to "Login", "#" %>
+            <%= link_to "Login", new_auth_path %>
           </ul>
         </li>
-        <li><%= link_to "Shopping cart", '#' %></li>
+        <% end %>
+        <li><%= link_to "Shopping cart", carts_path %></li>
+        <li><%= link_to "Wish list", wish_list_path(cur_user) if login? %></li>
+        <li><%= link_to "My orders", orders_path %></li>
       </ul>
     </div>
+
+    <div class="col-md-2">
+      <input type="text" name="search" class="search" placeholder="Search.." data-container="body"
+      data-search-type = "1" data-toggle="popover" data-html="true" data-placement="top"
+      title="<span class='font_opensans'>Change type of search</span>"
+      data-content="<div style='display: inline-flex;width:170px;' class='check_search'>Title <input
+      type='radio' name='r_search' value='1'>Author <input type='radio' name='r_search' value='2'></div>">
+      <i class="glyphicon glyphicon-search search_icon"></i>
+    </div>
+
   </div>
 </div>

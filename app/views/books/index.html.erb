@@ -1,11 +1,18 @@
-<div class="container">
+<div class="container all_books">
+  <%= render 'shared/flash_success' %>
+  <br/>
 <div class="row books_preview">
   <% @books.each do |book| %>
       <div class="col-md-2 book_preview">
-        <%= link_to image_tag Faker::Avatar.image("my-own-slug", "150x250") %>
-        <%= link_to book.title, book_path(book) %>
-        <span class="font_opensans"><%= book.price %></span>
+        <div class="height_250">
+        <%= link_to image_tag book.image %>
+        <div class="text_align_center"><%= link_to book.title, book_path(book), class: 'font_opensans color_book_index font_weight_600' %></div>
+        </div>
+          <hr>
+        <span class="font_opensans color_slider_top font_size_20 font_weight_900"> $<%= book.price %></span>
+          <%= link_to raw('<div class="pull-right book_preview_cart"><i class="glyphicon glyphicon-shopping-cart color_white font_size_20"></i></div>'), url_for(controller: :carts, action: :update, id: book.id), method: :patch %>
       </div>
   <% end %>
 </div>
+  <%= will_paginate %>
 </div>

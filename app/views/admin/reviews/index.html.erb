@@ -1,0 +1,17 @@
+<%= render 'admin/shared/flash_success' %>
+<table class="table table-bordered table-hover font_opensans font_size_14 background_white">
+  <caption>All review</caption>
+  <tr>
+    <td style="width: 80%;">Description</td>
+    <td>Approve</td>
+  </tr>
+  <% @reviews.each do |review| %>
+      <tr>
+        <td><%= review.review %></td>
+        <td><%= link_to raw('<i class="glyphicon glyphicon-thumbs-up"> </i> Approve<br/>'),
+        admin_review_path(review.id), method: :patch, data: {confirm: "Approve this review ?"} unless review.approve %>
+          <%= link_to raw('<i class="glyphicon glyphicon-remove"> </i> Delete<br/>'), url_for(action: :destroy, id: review.id), method: :delete, data: {confirm: "Are you sure?"} %>
+         </td>
+      </tr>
+  <% end %>
+</table>

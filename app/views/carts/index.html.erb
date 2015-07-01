@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 container_profile">
+      <% unless @items.empty? %>
+      <table class="table table-bordered font_opensans background_white">
+        <caption class="font_size_25 text_align_center">Shopping Cart</caption>
+        <thead>
+        <tr class="font_weight_600 background_white text_align_center">
+          <td>IMAGE</td>
+          <td>BOOK NAME</td>
+          <td>QUANTITY</td>
+          <td>UNIT PRICE</td>
+          <td>TOTAL PRICE</td>
+          <td>REMOVE</td>
+        </tr>
+        </thead>
+        <% @items.each do |item|  %>
+            <tr class="text_align_center">
+              <td><%= link_to image_tag(item.book.image, height:'70', width: '60') %></td>
+              <td><%= link_to item.book.title, item.book, class: 'color_black font_sie_14' %></td>
+              <td><%= item.quantity %></td>
+              <td class="color_slider_top font_size_20 font_weight_900">$<%= item.book.price %></td>
+              <td class="color_slider_top font_size_20 font_weight_900">$<%= item.book.price * item.quantity %></td>
+              <td class="font_size_20 font_weight_900">
+                <%= link_to raw('<div class="background_remove_cart remove_item_cart">
+                <i class="glyphicon glyphicon-remove color_white"></i></div>'), url_for(action: :destroy, id: item.id), method: :delete  %></td>
+            </tr>
+        <% end %>
+      </table>
+
+      <%= form_tag(orders_path) do %>
+          <div class="font_size_25 text_align_center">Next step</div>
+          <div class="col-md-12 block_cart_step font_opensans font_weight_600 font_size_14 cursor_pointer" data-toggle="collapse" href="#collapseExample">
+            Change Credit Card <span class="caret"></span>
+          </div>
+          <div class="collapse" id="collapseExample">
+            <div class="padding_top_20 col-md-12 background_white border_credit_card">
+              <div class="col-md-6 col-md-offset-3">
+                <%= select_tag('order[credit_card]', options_from_collection_for_select(cur_user.credit_cards, :id, :number), class: 'font_opensans') %>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12 block_cart_step font_opensans font_weight_600 font_size_14 cursor_pointer" data-toggle="collapse" href="#collapseExample2">
+            Change Addresses <span class="caret"></span>
+          </div>
+
+          <div class="collapse" id="collapseExample2">
+            <div class="padding_top_20 col-md-12 background_white border_credit_card">
+              <div class="col-md-6 col-md-offset-3">
+                <label>Your billing address</label>
+                <%= text_field_tag :billing_address, cur_user.address.billing_address, placeholder: 'Enter billing address' %>
+                <label>Your shipping address</label>
+                <%= text_field_tag :shipping_address, cur_user.address.shipping_address, placeholder: 'Enter shipping address' %>
+              </div>
+            </div>
+          </div>
+
+          <%= submit_tag 'Create order', class: "btn btn-large btn-register col-md-2 col-md-offset-5 margin_top_20" %>
+      <% end %>
+
+          <% else %>
+
+      <div class="text_align_center font_opensans font_size_25 font_weight_600">Shopping cart is empty</div>
+
+      <% end %>
+
+    </div>
+  </div>
+</div>

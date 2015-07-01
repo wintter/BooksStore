@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="col-md-12 font_size_14">
+    <br/>
+    <div class="font_opensans font_size_25">All user wish list</div>
+    <hr>
+    <br/>
+    <% @books.each do |book| %>
+        <% next if book.users.empty? %>
+        <div class="row container_profile font_size_17">
+          <div class="col-md-6">
+            <%= link_to image_tag(book.image, height: '70', width: '60') %>
+            <%= link_to book.title, book, class: 'color_black font_sie_14' %> /
+            <span class="color_slider_top font_weight_900">$<%= book.price %></span>
+          </div>
+          <div class="col-md-6">
+            Users who added this book to wish list:<br/>
+            <% book.users.each do |user| %>
+                <%= user.name %> /
+            <% end %>
+          </div>
+        </div>
+    <% end %>
+  </div>
+</div>

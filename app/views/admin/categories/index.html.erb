@@ -1,0 +1,19 @@
+<%= render 'admin/shared/flash_success' %>
+<div class="font_opensans font_size_14">
+  <label>You can add a new author </label>
+  <%= link_to 'Add new category', new_admin_category_path %>
+</div>
+<table class="table table-bordered table-hover font_opensans font_size_14 background_white">
+  <caption>All categories</caption>
+  <tr>
+    <td>Title</td>
+    <td>Delete</td>
+  </tr>
+  <% @categories.each do |category| %>
+      <tr>
+        <td><%= category.title %></td>
+        <td><%= link_to raw('<i class="glyphicon glyphicon-remove"> </i> Delete<br/>'), url_for(action: :destroy, id: category.id), method: :delete, data: {confirm: "Are you sure?"} %>
+          <%= link_to raw('<i class="glyphicon glyphicon-pencil"> </i> Edit'), url_for(action: :edit, id: category.id), method: :get %></td>
+      </tr>
+  <% end %>
+</table>

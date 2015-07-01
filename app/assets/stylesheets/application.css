@@ -11,5 +11,8 @@
  * file per style scope.
  *
  *= require_tree .
+ *= require star-rating.min.css
+ *= require skin-blue.min.css
+ *= require AdminLTE.css
  *= require_self
  */

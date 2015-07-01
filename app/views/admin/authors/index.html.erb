@@ -1,0 +1,23 @@
+<%= render 'admin/shared/flash_success' %>
+<div class="font_opensans font_size_14">
+  <label>You can add a new author </label>
+  <%= link_to 'Add new author', new_admin_author_path %>
+</div>
+<table class="table table-bordered table-hover font_opensans font_size_14 background_white">
+  <caption>All authors</caption>
+  <tr>
+    <td>Firstname</td>
+    <td>Lastname</td>
+    <td style="width: 70%;">Biography</td>
+    <td>Delete</td>
+  </tr>
+  <% @authors.each do |author| %>
+      <tr>
+        <td><%= author.firstname %></td>
+        <td><%= author.lastname %></td>
+        <td><%= author.biography %></td>
+        <td><%= link_to raw('<i class="glyphicon glyphicon-remove"> </i> Delete<br/>'), url_for(action: :destroy, id: author.id), method: :delete, data: {confirm: "Are you sure?"} %>
+          <%= link_to raw('<i class="glyphicon glyphicon-pencil"> </i> Edit'), url_for(action: :edit, id: author.id), method: :get %></td>
+      </tr>
+  <% end %>
+</table>

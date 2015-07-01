@@ -1,5 +1,5 @@
 class Rating < ActiveRecord::Base
-  belongs_to :customer
+  belongs_to :user
   belongs_to :book
-  validates_inclusion_of :rating_number, :in => 1..10
+  scope :approved, -> { where('review IS NOT NULL') }
 end

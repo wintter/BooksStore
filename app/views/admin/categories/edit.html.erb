@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+
+    <%= form_for @category, url: admin_category_path(@category), html: {class: 'font_opensans form_register'} do |f| %>
+        <div class="font_opensans font_size_20 text_align_center">Edit category</div>
+        <br/>
+        <%= render 'admin/shared/flash_category' %>
+
+        <%= f.text_field :title, placeholder: 'Enter category title' %>
+
+        <%= f.submit 'Update a category', class: 'btn btn-large btn-register' %>
+    <% end %>
+
+  </div>
+</div>

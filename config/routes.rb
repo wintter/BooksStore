@@ -2,10 +2,29 @@ Rails.application.routes.draw do
 
   #root path
   root 'books#index'
-  #add restful to some entity
-  resources :books
-  resources :users
 
+  #routes app
+  resources :books, only: [:index, :show]
+  resources :carts, only: [:index, :create, :update, :destroy]
+  resources :orders, only: [:index, :create]
+  resources :wish_lists, only: [:index, :show, :update, :destroy]
+
+  namespace :admin do
+    resources :categories, except: :show
+    resources :authors, except: :show
+    resources :books, except: [:show]
+    resources :reviews, only: [:index, :update, :destroy]
+  end
+
+  resources :users do
+    collection do
+      resources :auths, only: [:new, :create, :destroy]
+    end
+  end
+
+  post '/books/rate_book' => 'books#rate_book'
+
+  get '/manager', to: redirect('admin/books')
 
 
   #match '/signup',  to: 'users#new',            via: 'get'

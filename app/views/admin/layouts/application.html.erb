@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Amazon</title>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,400,600,300' rel='stylesheet' type='text/css'>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body class="skin-blue sidebar-mini">
+
+<div class="wrapper">
+  <header class="main-header">
+    <%= link_to raw('<span class="logo-lg"><b>Admin Panel</b></span>'), manager_path, class: 'logo' %>
+    <nav class="navbar navbar-static-top" role="navigation"></nav>
+  </header>
+  <aside class="main-sidebar">
+    <section class="sidebar">
+      <div class="user-panel">
+        <div class="pull-left image">
+          <%= gravatar_for cur_user %>
+        </div>
+        <div class="pull-left info">
+          <p><%= cur_user.name %></p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="header">Update information</li>
+
+        <li><%= link_to raw("<i class='fa fa-link'></i> <span>All books <span class='badge' style='background: #6f5499;'>" + Admin::BooksHelper::count_entity[0].to_s + "</span></span>"), admin_books_path %></li>
+        <li><%= link_to raw("<i class='fa fa-link'></i> <span>All authors <span class='badge' style='background: #6f5499;'>" + Admin::BooksHelper::count_entity[2].to_s + "</span></span>"), admin_authors_path %></li>
+        <li><%= link_to raw("<i class='fa fa-link'></i> <span>All categories <span class='badge' style='background: #6f5499;'>" + Admin::BooksHelper::count_entity[1].to_s + "</span></span>"), admin_categories_path %></li>
+        <li><%= link_to raw("<i class='fa fa-link'></i> <span>All reviews <span class='badge' style='background: #6f5499;'>" + Admin::BooksHelper::count_entity[3].to_s + "</span></span>"), admin_reviews_path %></li>
+
+      </ul>
+    </section>
+
+  </aside>
+  <div class="content-wrapper">
+
+    <section class="content">
+      <%= yield %>
+    </section>
+
+  </div>
+  <footer class="main-footer">
+    <strong>Copyright &copy; 2015 <a href="#">BooksStore</a>.</strong> All rights reserved.
+  </footer>
+</div>
+
+</body>
+</html>

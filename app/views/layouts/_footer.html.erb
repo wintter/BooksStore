@@ -1,0 +1,21 @@
+<div class="col-md-12 font_opensans padding_top_60">
+  <hr>
+  <div class="row">
+    <div class="col-md-2 col-md-offset-1">
+      <h3>My account</h3>
+      <% if login? %>
+              <%= link_to "Profile", user_path(cur_user) %><br/>
+              <%= link_to "Settings", edit_user_path(cur_user) %><br/>
+              <%= link_to "Logout", auth_path(cur_user), method: :delete %>
+      <% else %>
+              <%= link_to "Register", new_user_path %><br/>
+              <%= link_to "Login", new_auth_path %>
+      <% end %>
+    </div>
+    <div class="col-md-2">
+      <h3>My cart</h3>
+      <%= link_to "Shopping cart", carts_path %>
+    </div>
+  </div>
+  <br/><br/><br/>
+</div>

@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+
+    <%= form_for @author, url: admin_author_path(@author), html: {class: 'font_opensans form_register'} do |f| %>
+        <div class="font_opensans font_size_20 text_align_center">Edit author</div>
+        <br/>
+        <%= render 'admin/shared/flash_author' %>
+
+        <%= f.text_field :firstname, placeholder: 'Enter author firstname' %>
+        <%= f.text_field :lastname, placeholder: 'Enter author lastname' %>
+        <%= f.text_area :biography, cols: 10, rows:10 , placeholder: 'Enter author biography' %>
+
+        <%= f.submit 'Update author', class: 'btn btn-large btn-register' %>
+    <% end %>
+
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+
+    <%= form_for @book, url: admin_book_path(@book), html: {class: 'font_opensans form_register'} do |f| %>
+        <div class="font_opensans font_size_20 text_align_center">Edit book</div>
+        <br/>
+        <%= render 'admin/shared/flash_book' %>
+        <%= f.text_field :title, placeholder: 'Enter books title' %>
+
+        <%= f.text_area :description, cols: 10, rows:10, placeholder: 'Enter books description' %>
+
+        <%= f.text_field :price, placeholder: 'Enter books price' %>
+
+        <%= f.text_field :in_stock, placeholder: 'Enter couns books' %>
+
+        <%= f.label 'Change book category' %>
+        <%= select_tag('book[category_id]', options_from_collection_for_select(@categories, :id, :title, @book.category.id)) %>
+
+        <%= f.label 'Change book author' %>
+        <%= select_tag('book[author_id]', options_from_collection_for_select(@authors, :id, :firstname, @book.author.id)) %>
+
+        <%= f.submit 'Update books', class: 'btn btn-large btn-register' %>
+    <% end %>
+
+  </div>
+</div>
