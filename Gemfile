@@ -21,6 +21,8 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'rake'
+gem 'faker'
+
 
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
@@ -42,7 +44,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'factory_girl_rails'
-  gem 'faker'
   gem 'database_cleaner'
   gem 'shoulda-matchers'
   gem 'awesome_print'
