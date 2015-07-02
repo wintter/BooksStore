@@ -14,5 +14,5 @@
       </div>
   <% end %>
 </div>
-  <%= will_paginate %>
+  <%= will_paginate unless params[:id] || params[:text] %>
 </div>

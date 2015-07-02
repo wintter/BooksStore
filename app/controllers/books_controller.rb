@@ -3,7 +3,7 @@ class BooksController < ApplicationController
 
   def index
     if params[:id]
-      @books = Book.where(category: params[:id]).paginate(page: params[:page], :per_page => 10)
+      @books = Book.where(category: params[:id])
       render :layout => false
     elsif params[:text]
       book_search
@@ -15,10 +15,10 @@ class BooksController < ApplicationController
 
   def book_search
     if params[:type].eql? '1'
-      @books = Book.where("title LIKE '%#{params[:text]}%'").paginate(page: params[:page], :per_page => 10)
+      @books = Book.where("title LIKE '%#{params[:text]}%'")
     else
       @author = Author.where("firstname LIKE '%#{params[:text]}%' OR lastname LIKE '%#{params[:text]}%'")
-      @books = Book.where(author: @author).paginate(page: params[:page], :per_page => 10)
+      @books = Book.where(author: @author)
     end
     render :layout => false
   end
