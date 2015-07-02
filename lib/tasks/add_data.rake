@@ -17,7 +17,7 @@ namespace :db_populate do
       description = Faker::Lorem.paragraph(5)
       price = Faker::Commerce.price
       in_stock = Faker::Number.number(2)
-      image = 'img_book' << rand(1..10) << '.png'
+      image = 'img_book' << rand(1..10).to_s << '.png'
       Book.create!(title: title,
                    description: description,
                    price: price, image: image,
@@ -92,4 +92,15 @@ namespace :db_populate do
     end
   end
 
+end
+
+task :db_populate do
+  Rake::Task['db_populate:authors'].invoke
+  Rake::Task['db_populate:categories'].invoke
+  Rake::Task['db_populate:books'].invoke
+  Rake::Task['db_populate:users'].invoke
+  Rake::Task['db_populate:ratings'].invoke
+  Rake::Task['db_populate:address'].invoke
+  Rake::Task['db_populate:credit_card'].invoke
+  Rake::Task['db_populate:wish_list'].invoke
 end

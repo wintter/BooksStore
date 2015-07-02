@@ -13,8 +13,7 @@ class CartsController < ApplicationController
   def update
     cart_item = @cart.cart_items.where(book_id: params[:id]).first
     if cart_item
-      cart_item.quantity+=1
-      cart_item.save
+      cart_item.increment!(:quantity)
     else
       @cart.cart_items << CartItem.new(cart: @cart, book_id: params[:id], quantity: 1)
     end
@@ -23,7 +22,11 @@ class CartsController < ApplicationController
   end
 
   def destroy
-    CartItem.find(params[:id]).destroy
+    if params[:reduce]
+      CartItem.find(params[:id]).decrement!(:quantity)
+    else
+      CartItem.find(params[:id]).destroy
+    end
     redirect_to action: 'index'
   end
 

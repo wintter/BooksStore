@@ -18,7 +18,11 @@
             <tr class="text_align_center">
               <td><%= link_to image_tag(item.book.image, height:'70', width: '60') %></td>
               <td><%= link_to item.book.title, item.book, class: 'color_black font_sie_14' %></td>
-              <td><%= item.quantity %></td>
+              <td>
+                <%= link_to raw('<i class="glyphicon glyphicon-minus color_slider_top"></i>'), url_for(action: :destroy, id: item.id, reduce: true), method: :delete %>
+                <%= item.quantity %>
+                <%= link_to raw('<i class="glyphicon glyphicon-plus color_slider_top"></i>'), url_for(controller: :carts, action: :update, id: item.book.id), method: :patch %>
+              </td>
               <td class="color_slider_top font_size_20 font_weight_900">$<%= item.book.price %></td>
               <td class="color_slider_top font_size_20 font_weight_900">$<%= item.book.price * item.quantity %></td>
               <td class="font_size_20 font_weight_900">
