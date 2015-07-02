@@ -3,7 +3,7 @@ class CartsController < ApplicationController
   before_action :check_login_user, only: [:index, :create, :update, :destroy]
 
   def index
-    @items = @cart.cart_items
+    @items = @cart.cart_items.order(quantity: :desc)
   end
 
   def create
@@ -22,7 +22,7 @@ class CartsController < ApplicationController
   end
 
   def destroy
-    if params[:reduce]
+    if params[:reduce] && CartItem.find(params[:id]).quantity != 1
       CartItem.find(params[:id]).decrement!(:quantity)
     else
       CartItem.find(params[:id]).destroy
