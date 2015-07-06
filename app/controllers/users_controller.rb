@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :check_current_user, only: [:show, :edit, :update]
+  before_action :check_current_user, only: [:edit]
   before_action :check_admin, only: [:destroy]
 
   def new
@@ -16,8 +16,10 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    @user.address_attributes=(address_params)
     if @user.save
       flash[:success] = 'Welcome to BooksStore ' << @user.name
+      login @user
       redirect_to @user
     else
       render 'new'
@@ -42,12 +44,11 @@ class UsersController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit(:name, :email, :password,
-                                   :password_confirmation)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
 
     def address_params
-      params.require(:user).require(:address_attributes).permit(:billing_address, :shipping_address)
+      params.require(:user).require(:address_attributes).permit(:billing_address, :shipping_address, :id)
     end
 
 

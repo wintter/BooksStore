@@ -6,8 +6,8 @@ class User < ActiveRecord::Base
   has_one :address
   has_and_belongs_to_many :books
   #need for form_for
-  accepts_nested_attributes_for :credit_cards, :update_only => true
-  accepts_nested_attributes_for :address, :update_only => true
+  accepts_nested_attributes_for :credit_cards
+  accepts_nested_attributes_for :address
 
   before_save { self.email = email.downcase }
   before_create :create_remember_token

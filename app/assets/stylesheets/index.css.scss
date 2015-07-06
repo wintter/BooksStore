@@ -1,5 +1,5 @@
 // Place all the styles related to the Index controller here.
-// They will automatically be included in application.css.
+// They will automatically be included in application.css.scss.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -76,6 +76,9 @@ html,body {
 }
 .padding_top_20 {
   padding-top: 20px;
+}
+.padding_top_30 {
+  padding-top: 30px;
 }
 .margin_top_20 {
   margin-top: 20px;
