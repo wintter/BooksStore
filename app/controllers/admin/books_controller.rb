@@ -1,6 +1,6 @@
 class Admin::BooksController < ApplicationController
-  before_action :check_admin, only: [:index, :new, :create, :edit, :update, :destroy]
   before_action :check_login_user
+  before_action :check_admin, only: [:index, :new, :create, :edit, :update, :destroy]
   layout 'admin/layouts/application'
 
   def index
