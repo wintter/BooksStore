@@ -15,8 +15,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
-    @user.address_attributes=(address_params)
+    @user = User.new(user_params_create)
     if @user.save
       flash[:success] = 'Welcome to BooksStore ' << @user.name
       login @user
@@ -28,9 +27,7 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    @user.credit_cards_attributes=(params[:user][:credit_cards_attributes])
-    @user.address_attributes=(address_params)
-    if @user.update_attributes(user_params)
+    if @user.update_attributes(user_params_update)
       flash[:success] = 'Profile updated'
       redirect_to @user
     else
@@ -42,14 +39,16 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
   end
 
-  private
-    def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    private
+    def user_params_create
+      params.require(:user).permit(:name, :email, :password, :password_confirmation,
+                                   address_attributes: [:billing_address, :shipping_address])
     end
 
-    def address_params
-      params.require(:user).require(:address_attributes).permit(:billing_address, :shipping_address, :id)
+    def user_params_update
+      params.require(:user).permit(:name, :email, :password, :password_confirmation,
+                                   credit_cards_attributes: [:id, :CVV, :number] ,
+                                   address_attributes: [:billing_address, :shipping_address])
     end
-
 
 end
