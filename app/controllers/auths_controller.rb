@@ -20,9 +20,4 @@ class AuthsController < ApplicationController
     redirect_to root_path
   end
 
-  private
-    def auths_params
-      params.permit(:email, :password)
-    end
-
 end
