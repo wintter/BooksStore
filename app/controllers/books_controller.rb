@@ -4,30 +4,19 @@ class BooksController < ApplicationController
   def index
     if params[:id]
       @books = Book.where(category: params[:id])
-      render :layout => false
     elsif params[:text]
-      book_search
+      @books = Book.search params[:type], params[:text]
     else
       @categories = Category.all
       @books = Book.paginate(page: params[:page], :per_page => 10)
     end
-  end
-
-  def book_search
-    if params[:type].eql? '1'
-      @books = Book.where("title LIKE '%#{params[:text]}%'")
-    else
-      @author = Author.where("firstname LIKE '%#{params[:text]}%' OR lastname LIKE '%#{params[:text]}%'")
-      @books = Book.where(author: @author)
-    end
-    render :layout => false
+    render layout: false if params[:id] || params[:text]
   end
 
   def show
     @book = Book.find(params[:id])
-    @rating = Rating.where(book: @book, user: cur_user).first
-    @rating ? @rating = @rating.rating_number : @rating = 0
-    @review = Rating.where(book: @book, approve: true).all
+    @rating = Rating.get_rate @book, cur_user
+    @review = Rating.get_review @book
   end
 
   def rate_book
