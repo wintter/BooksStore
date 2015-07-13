@@ -67,11 +67,6 @@ RSpec.describe Admin::AuthorsController, type: :controller do
 			get :edit, id: 1
 		end
 
-		it 'correct find' do
-			get :edit, id: 1
-			expect(assigns(:author)).to eq author
-		end
-
 	end
 
 	describe 'POST #create' do

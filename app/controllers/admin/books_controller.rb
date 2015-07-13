@@ -43,7 +43,7 @@ class Admin::BooksController < ApplicationController
 
   def destroy
     Book.find(params[:id]).destroy
-    redirect_to root_path
+    redirect_to action: 'index'
   end
 
   private
