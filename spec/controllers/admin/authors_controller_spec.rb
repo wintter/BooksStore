@@ -8,7 +8,7 @@ RSpec.describe Admin::AuthorsController, type: :controller do
 		allow(controller).to receive(:check_admin).and_return true
 	end
 
-	shared_examples "#create, #update with valid arguments " do
+	shared_examples "#create, #update with valid arguments" do
 		describe 'redirect' do
 
 			before { request }
