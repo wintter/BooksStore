@@ -23,10 +23,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'rake'
 gem 'faker'
 
-
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
-
+gem 'omniauth-facebook'
 
 group :development do
   gem 'sqlite3'
