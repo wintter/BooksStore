@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   end
 
   post '/books/rate_book' => 'books#rate_book'
+  get '/auth/:provider/callback' => 'auths#log_facebook'
 
   get '/manager', to: redirect('admin/books')
 
