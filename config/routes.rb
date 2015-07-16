@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   #routes app
   resources :books, only: [:index, :show]
   resources :carts, only: [:index, :create, :update, :destroy]
-  resources :orders, only: [:index, :create]
+  resources :orders, only: [:index, :create, :update]
   resources :wish_lists, only: [:index, :show, :update, :destroy]
 
   namespace :admin do
@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     resources :authors, except: :show
     resources :books, except: [:show]
     resources :reviews, only: [:index, :update, :destroy]
+    resources :orders, only: [:index, :update]
   end
 
   resources :users do
