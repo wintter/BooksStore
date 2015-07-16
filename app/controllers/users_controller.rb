@@ -1,17 +1,14 @@
 class UsersController < ApplicationController
-  before_action :check_current_user, only: [:edit]
-  before_action :check_admin, only: [:destroy]
+  load_and_authorize_resource
+  skip_authorize_resource :only => [:new]
 
   def new
-    @user = User.new
   end
 
   def show
-    @user = User.find(params[:id])
   end
 
   def edit
-    @user = User.find(params[:id])
   end
 
   def create
@@ -26,7 +23,6 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:id])
     if @user.update_attributes(user_params_update)
       flash[:success] = 'Profile updated'
       redirect_to @user
@@ -36,11 +32,11 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
+    @user.destroy
   end
 
     private
-    def user_params_create
+    def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation,
                                    address_attributes: [:billing_address, :shipping_address])
     end

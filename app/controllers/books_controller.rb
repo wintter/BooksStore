@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_action :check_login_user, only: [:show]
+  before_action :check_login_user, only: [:show, :rate_book]
 
   def index
     if params[:id]
@@ -15,7 +15,7 @@ class BooksController < ApplicationController
 
   def show
     @book = Book.find(params[:id])
-    @rating = Rating.get_rate @book, cur_user
+    @rating = Rating.get_rate @book, current_user
     @review = Rating.get_review @book
   end
 

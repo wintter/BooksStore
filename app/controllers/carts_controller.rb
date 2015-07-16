@@ -7,7 +7,7 @@ class CartsController < ApplicationController
   end
 
   def create
-    @cart = Cart.where(user: cur_user).first_or_create
+    @cart = Cart.where(user: current_user).first_or_create
   end
 
   def update
