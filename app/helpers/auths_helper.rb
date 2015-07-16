@@ -8,6 +8,7 @@ module AuthsHelper
 
   def logout
     cookies.delete(:remember_token)
+    reset_session
   end
 
   #return user by token
