@@ -148,8 +148,8 @@ html,body {
   top:100px;
   text-align:center;
 }
-.height_250 {
-  height:250px;
+.height_225 {
+  height:225px;
 }
 .color_slider_top {
   color: #89ca18;
@@ -261,4 +261,22 @@ input {
 .pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus, .pagination > .active > span, .pagination > .active > span:hover, .pagination > .active > span:focus {
   background: #89ca18;
   border:1px solid #89ca18;
+}
+.bs-callout {
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+}
+.bs-callout-info {
+  border-left-color: #1b809e;
+}
+.link_order {
+  padding: 20px;
+  background: #89ca18;
+  color: white;
+    &:hover {
+      color: white;
+    }
 }
