@@ -4,9 +4,9 @@
     <div class="col-md-2 col-md-offset-1">
       <h3>My account</h3>
       <% if login? %>
-              <%= link_to "Profile", user_path(cur_user) %><br/>
-              <%= link_to "Settings", edit_user_path(cur_user) %><br/>
-              <%= link_to "Logout", auth_path(cur_user), method: :delete %>
+              <%= link_to "Profile", user_path(current_user) %><br/>
+              <%= link_to "Settings", edit_user_path(current_user) %><br/>
+              <%= link_to "Logout", auth_path(current_user), method: :delete %>
       <% else %>
               <%= link_to "Register", new_user_path %><br/>
               <%= link_to "Login", new_auth_path %>

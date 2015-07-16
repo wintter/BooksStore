@@ -4,11 +4,11 @@
 <div class="row books_preview">
   <% @books.each do |book| %>
       <div class="col-md-2 book_preview">
-        <div class="height_250">
-        <%= link_to image_tag book.image %>
-        <div class="text_align_center"><%= link_to book.title, book_path(book), class: 'font_opensans color_book_index font_weight_600' %></div>
+        <div class="height_225">
+        <%= image_tag book.image %>
         </div>
-          <hr>
+        <div class="text_align_center"><%= link_to book.title, book_path(book), class: 'font_opensans color_book_index font_weight_600' %></div>
+        <hr>
         <span class="font_opensans color_slider_top font_size_20 font_weight_900"> $<%= book.price %></span>
           <%= link_to raw('<div class="pull-right book_preview_cart"><i class="glyphicon glyphicon-shopping-cart color_white font_size_20"></i></div>'), url_for(controller: :carts, action: :update, id: book.id), method: :patch %>
       </div>

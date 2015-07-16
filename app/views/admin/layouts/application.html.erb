@@ -18,10 +18,10 @@
     <section class="sidebar">
       <div class="user-panel">
         <div class="pull-left image">
-          <%= gravatar_for cur_user %>
+          <%= gravatar_for current_user %>
         </div>
         <div class="pull-left info">
-          <p><%= cur_user.name %></p>
+          <p><%= current_user.name %></p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -32,6 +32,7 @@
         <li><%= link_to raw("<i class='fa fa-link'></i> <span>All authors <span class='badge' style='background: #6f5499;'>" + Admin::BooksHelper::count_entity[2].to_s + "</span></span>"), admin_authors_path %></li>
         <li><%= link_to raw("<i class='fa fa-link'></i> <span>All categories <span class='badge' style='background: #6f5499;'>" + Admin::BooksHelper::count_entity[1].to_s + "</span></span>"), admin_categories_path %></li>
         <li><%= link_to raw("<i class='fa fa-link'></i> <span>All reviews <span class='badge' style='background: #6f5499;'>" + Admin::BooksHelper::count_entity[3].to_s + "</span></span>"), admin_reviews_path %></li>
+        <li><%= link_to raw("<i class='fa fa-link'></i> <span>All orders <span class='badge' style='background: #6f5499;'>" + Admin::BooksHelper::count_entity[4].to_s + "</span></span>"), admin_orders_path %></li>
 
       </ul>
     </section>

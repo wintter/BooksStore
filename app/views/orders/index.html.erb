@@ -8,11 +8,11 @@
               <div class="col-md-3">
                 Total: <span class="color_slider_top font_size_20 font_weight_900">$<%= item.total_price %></span><br/>
                 <hr>
-                Status: <span class="color_slider_top"><%= item.state %></span><br/>
+                Status: <span class="color_slider_top"><%= item.order_state.state %></span><br/>
                 <hr>
-                Billing address: <%= item.billing_address %><br/>
+                Billing address: <%= item.address.billing_address %><br/>
                 <hr>
-                Shipping address: <%= item.shipping_address %><br/>
+                Shipping address: <%= item.address.shipping_address %><br/>
                 <hr>
                 Credit card: <%= item.credit_card.number %>
               </div>

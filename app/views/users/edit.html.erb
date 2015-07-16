@@ -12,33 +12,6 @@
           <%= f.label :email %>
           <%= f.text_field :email %>
 
-          <ul>
-            <%= f.fields_for :address do |address_form| %>
-
-                <%= address_form.label :billing_address %>
-                <%= address_form.text_field :billing_address %>
-
-                <%= address_form.label :shipping_address %>
-                <%= address_form.text_field :shipping_address %>
-
-            <% end %>
-          </ul>
-
-          <%= link_to 'Click to edit your CreditCards:', '#', class: 'link_credit_card' %>
-
-          <ul class="credit_carts_forms hide">
-            <%= f.fields_for :credit_cards do |credit_cards_form| %>
-
-                  <%= credit_cards_form.label :number %>
-                  <%= credit_cards_form.text_field :number %>
-
-                  <%= credit_cards_form.label :CVV %>
-                  <%= credit_cards_form.text_field :CVV %>
-
-            <% end %>
-          </ul>
-          <br/><br/>
-
           <%= f.label :password %>
           <%= f.password_field :password %>
 

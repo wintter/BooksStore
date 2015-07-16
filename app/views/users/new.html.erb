@@ -8,14 +8,6 @@
 
           <%= f.text_field :email, placeholder: 'Enter email' %>
 
-          <ul>
-            Address information:<br/>
-            <%= label :billing_address, 'Enter billing address' %>
-            <%= text_field_tag 'user[address_attributes][billing_address]', nil, placeholder: 'Enter billing address' %>
-            <%= label :billing_address, 'Enter shipping address' %>
-            <%= text_field_tag 'user[address_attributes][shipping_address]', nil, placeholder: 'Enter shipping address' %>
-          </ul>
-
           <%= f.password_field :password, placeholder: 'Enter password' %>
 
           <%= f.password_field :password_confirmation, placeholder: 'Confirm password' %>
