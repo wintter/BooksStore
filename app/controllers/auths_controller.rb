@@ -23,7 +23,6 @@ class AuthsController < ApplicationController
   def log_facebook
     user = User.facebook_login(request.env['omniauth.auth'])
     login user
-    reset_session
     redirect_to user_path user
   end
 
