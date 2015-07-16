@@ -7,5 +7,5 @@ else
 end
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :facebook, code, secret_key,
-           :scope => 'email', :display => 'popup'
+           :scope => 'email', :info_fields => 'email, name'
 end
