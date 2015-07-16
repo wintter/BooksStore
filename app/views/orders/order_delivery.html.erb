@@ -1,0 +1,21 @@
+<div class="col-md-12">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <%= form_tag(order_path(current_user, step: 3), method: :patch, class: 'font_opensans form_register') do %>
+          <div class="font_opensans font_size_20 text_align_center">Delivery</div><br/>
+
+          <%= label_tag '5', 'UPS Ground +5$' %>
+          <%= radio_button_tag 'delivery', '5', get_checked_value(session[:order_delivery], '5') %>
+
+          <%= label_tag '5', 'UPS Two Dat +10$' %>
+          <%= radio_button_tag 'delivery', '10', get_checked_value(session[:order_delivery], '10') %>
+
+          <%= label_tag '5', 'UPS One Day +15$' %>
+          <%= radio_button_tag 'delivery', '15', get_checked_value(session[:order_delivery], '15') %>
+
+          <%= submit_tag 'Save and continue', class: "btn btn-large btn-register" %>
+      <% end %>
+
+    </div>
+  </div>
+</div>
