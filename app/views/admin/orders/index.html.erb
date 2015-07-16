@@ -1,0 +1,21 @@
+<%= render 'admin/shared/flash_success' %>
+<table class="table table-bordered table-hover font_opensans font_size_14 background_white">
+  <caption>All orders</caption>
+  <tr>
+    <td>Price</td>
+    <td>User</td>
+    <td>Change Status</td>
+  </tr>
+  <% @orders.each do |order| %>
+      <tr>
+        <td><%= order.total_price %></td>
+        <td><%= order.user.name %></td>
+        <td>
+          <%= form_tag(admin_order_path(order), method: :patch) do %>
+              <%= select_tag('order[order_state_id]', options_from_collection_for_select(@states, :id, :state, order.order_state.id)) %>
+              <%= submit_tag('Update status', class: "btn btn-large btn-register") %>
+          <% end %>
+        </td>
+      </tr>
+  <% end %>
+</table>
