@@ -7,6 +7,7 @@ module Admin::BooksHelper
       @count_entity << Category.all.count
       @count_entity << Author.all.count
       @count_entity << Rating.approved.all.count
+      @count_entity << Order.all.count
     end
   end
 
