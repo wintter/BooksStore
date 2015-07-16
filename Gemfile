@@ -26,6 +26,8 @@ gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'omniauth-facebook'
+gem 'mini_magick'
+gem 'cancancan'
 
 group :development do
   gem 'sqlite3'
