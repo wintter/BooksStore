@@ -18,6 +18,14 @@ class Book < ActiveRecord::Base
       end
     end
 
+    def save_image filename, id
+      image = MiniMagick::Image.read(filename.read)
+      image.resize "170x200"
+      image_name = "img_book" << id << ".png"
+      image.write "#{Rails.root}/app/assets/images/" << image_name
+      Book.find(id).update_attribute(:image, image_name)
+    end
+
   end
 
 end
