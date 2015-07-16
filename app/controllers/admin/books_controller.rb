@@ -1,27 +1,24 @@
 class Admin::BooksController < ApplicationController
-  before_action :check_login_user
-  before_action :check_admin, only: [:index, :new, :create, :edit, :update, :destroy]
+  load_and_authorize_resource
+  skip_authorize_resource :only => [:new]
   layout 'admin/layouts/application'
 
   def index
-    @books = Book.all
   end
 
   def new
     @categories = Category.all
     @authors = Author.all
-    @book = Book.new
   end
 
   def edit
     @categories = Category.all
     @authors = Author.all
-    @book = Book.find(params[:id])
   end
 
   def create
-    @book = Book.new(book_params)
     if @book.save
+      Book.save_image params[:book][:image], @book.id if params[:book][:image]
       flash[:success] = 'Book ' << @book.title << ' has successfully created'
       redirect_to action: 'index'
     else
@@ -32,8 +29,8 @@ class Admin::BooksController < ApplicationController
   end
 
   def update
-    @book = Book.find(params[:id])
     if @book.update_attributes(book_params)
+      Book.save_image params[:book][:image], params[:id] if params[:book][:image]
       flash[:success] = 'Book ' << @book.title << ' has successfully updated'
       redirect_to action: 'index'
     else
@@ -42,7 +39,7 @@ class Admin::BooksController < ApplicationController
   end
 
   def destroy
-    Book.find(params[:id]).destroy
+    @book.destroy
     redirect_to action: 'index'
   end
 

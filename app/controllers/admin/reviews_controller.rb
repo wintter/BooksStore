@@ -1,6 +1,5 @@
 class Admin::ReviewsController < ApplicationController
   before_action :check_login_user
-  before_action :check_admin, only: [:index, :update, :destroy]
   layout 'admin/layouts/application'
 
   def index
