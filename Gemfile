@@ -28,6 +28,7 @@ gem 'bootstrap-will_paginate'
 gem 'omniauth-facebook'
 gem 'mini_magick'
 gem 'cancancan'
+gem 'devise'
 
 group :development do
   gem 'sqlite3'
