@@ -4,9 +4,12 @@ RSpec.describe Address, type: :model do
 
   let(:subject) { FactoryGirl.create(:address) }
 
-  it { expect(subject).to validate_presence_of :adress }
-  it { expect(subject).to validate_presence_of :zipcode }
+  it { expect(subject).to validate_presence_of :billing_address }
+  it { expect(subject).to validate_presence_of :shipping_address }
   it { expect(subject).to validate_presence_of :city }
-  it { expect(subject).to validate_presence_of :phone }
+
+  xit 'need test format'
+
+  it { expect(subject).to have_one :order }
 
 end

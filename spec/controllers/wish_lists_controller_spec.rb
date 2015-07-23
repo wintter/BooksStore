@@ -2,32 +2,20 @@ require 'rails_helper'
 
 RSpec.describe WishListsController, type: :controller do
 
-  describe "GET #show" do
-    it "returns http success" do
-      get :show
-      expect(response).to have_http_status(:success)
-    end
+  describe 'GET #show' do
+
   end
 
-  describe "GET #index" do
-    it "returns http success" do
-      get :index
-      expect(response).to have_http_status(:success)
-    end
+  describe 'GET #index' do
+
   end
 
-  describe "GET #create" do
-    it "returns http success" do
-      get :create
-      expect(response).to have_http_status(:success)
-    end
+  describe 'PATCH #update' do
+
   end
 
-  describe "GET #destroy" do
-    it "returns http success" do
-      get :destroy
-      expect(response).to have_http_status(:success)
-    end
+  describe 'DELETE #destroy' do
+
   end
 
 end

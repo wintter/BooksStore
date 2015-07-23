@@ -3,36 +3,57 @@ require 'rails_helper'
 RSpec.describe Order, type: :model do
 
   let(:subject) { FactoryGirl.create(:order) }
-
-  it { expect(subject).to validate_inclusion_of(:state).in_array(%w(in\ progress completed shipped)) }
+  let(:user) { FactoryGirl.create(:user) }
+  let(:delivery) { '5' }
 
   it { expect(subject).to have_many :order_items }
   it { expect(subject).to belong_to :user }
   it { expect(subject).to belong_to :credit_card }
-  it { expect(subject).to belong_to :billing_address }
-  it { expect(subject).to belong_to :shipping_address }
+  it { expect(subject).to belong_to :order_state }
+  it { expect(subject).to belong_to :address }
 
-  it "should set status in progress" do
-    subject.state = nil
-    subject.save
-    expect(subject.state).to eq 'in progress'
+  context '#create_order' do
+
+    before do
+      allow(Order).to receive(:get_total_price)
+    end
+
+    let(:address) { FactoryGirl.attributes_for(:address) }
+    let(:credit_card) { FactoryGirl.attributes_for(:credit_card) }
+
+    it 'Order receive #get_total_price' do
+      expect(Order).to receive(:get_total_price)
+      subject.create_order(user, address, credit_card, delivery)
+    end
+
+    it 'call #total_price' do
+      expect(subject).to receive(:total_price)
+      subject.create_order(user, address, credit_card, delivery)
+    end
+
+    it 'call #create_credit_card' do
+      expect(subject).to receive(:create_credit_card)
+      subject.create_order(user, address, credit_card, delivery)
+    end
+
+    it 'call #create_address' do
+      expect(subject).to receive(:create_address)
+      subject.create_order(user, address, credit_card, delivery)
+    end
+
   end
 
-  it "#add_book with price 0" do
-    expect(subject.total_price).to eq 0
-  end
+  context '.get_total_price' do
 
-  it "#add_book with price 200" do
-    book = FactoryGirl.create(:book, price: 100)
-    subject.add_book book
-    subject.add_book book
-    subject.save
-    expect(subject.total_price).to eq 200
-  end
+    before do
+      allow(Cart).to receive_message_chain(:where, :first, :cart_items, :map, :inject, :+)
+    end
 
-  it "should have date" do
-    subject.save
-    expect(subject.completed_date).not_to eq nil
+    it '#where with user' do
+      expect(Cart).to receive(:where).with(user: user)
+      Order.get_total_price(user, delivery)
+    end
+
   end
 
 end

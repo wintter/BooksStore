@@ -1,145 +1,158 @@
 require 'rails_helper'
 
 RSpec.describe Admin::CategoriesController, type: :controller do
-	
-	before do
-		allow_message_expectations_on_nil
-		allow(controller).to receive(:check_login_user).and_return true
-		allow(controller).to receive(:check_admin).and_return true
-	end
 
-	shared_examples "#create, #update with valid arguments" do
-		describe 'redirect' do
+  let(:user) { FactoryGirl.create(:user) }
+  let(:ability) { Ability.new(user) }
 
-			before { request }
+  before do
+    allow_message_expectations_on_nil
+    allow(controller).to receive(:current_ability).and_return(ability)
+    ability.can :manage, :all
+    sign_in user
+  end
 
-			it 'to :index' do
-				expect(response).to redirect_to(:admin_categories)
-			end
+  describe 'GET #index' do
 
-			it 'and success flash' do
-				expect(flash[:success]).to be_present
-			end
+    context 'cancan doesnt allow :index' do
+      before do
+        ability.cannot :read, Category
+        get :index
+      end
+      it { expect(response).to redirect_to(root_path) }
+    end
 
-		end
-	end
+  end
 
-	shared_examples "#create, #update with invalid arguments" do
-		describe 'render' do
+  describe 'GET #new' do
 
-			before { request }
+    context 'cancan doesnt allow :index' do
+      before do
+        ability.cannot :create, Category
+        get :new
+      end
+      it { expect(response).to redirect_to(root_path) }
+    end
 
-			it 'templates' do
-				expect(response).to render_template(templates)
-			end
+  end
 
-		end
-	end
+  describe 'GET #edit' do
 
-	describe 'GET #index' do
+    context 'cancan doesnt allow :index' do
+      let(:category) { FactoryGirl.create(:category) }
+      before do
+        ability.cannot :update, Category
+        get :edit, id: category.id
+      end
+      it { expect(response).to redirect_to(root_path) }
+    end
 
-		it 'use #all' do
-			expect(Category).to receive(:all)
-			get :index
-		end
+  end
 
-	end
+  shared_examples "#create, #update with valid arguments" do
+    describe 'redirect' do
 
-	describe 'GET #new' do
+      before { request }
 
-		it 'use #new' do
-			expect(Category).to receive(:new)
-			get :new
-		end
+      it 'to :index' do
+        expect(response).to redirect_to(:admin_categories)
+      end
 
-	end
+      it 'and success flash' do
+        expect(flash[:success]).to be_present
+      end
 
-	describe 'GET #edit' do
+    end
+  end
 
-		let(:category) { FactoryGirl.create(:category) }
+  shared_examples "#create, #update with invalid arguments" do
+    describe 'render' do
 
-		before do
-			allow(Category).to receive(:find).and_return category
-		end
+      before { request }
 
-		it 'use #find' do
-			expect(Category).to receive(:find)
-			get :edit, id: 1
-		end
+      it 'templates' do
+        expect(response).to render_template(templates)
+      end
 
-	end
+    end
+  end
 
-	describe 'POST #create' do
+  describe 'POST #create' do
+    let(:category_params) { FactoryGirl.attributes_for(:category) }
 
-		context 'with valid attributes' do
-			let(:category_params) { FactoryGirl.attributes_for(:category) }
+    context 'with valid attributes' do
 
-			before do
-				allow(assigns(:category)).to receive(:save).and_return true
-				allow(assigns(:category)).to receive(:title).and_return ''
-			end
+      before do
+        allow(assigns(:category)).to receive(:save).and_return true
+        allow(assigns(:category)).to receive(:firstname).and_return ''
+      end
 
-			it 'receives new with params' do
-				expect(Category).to receive(:new).with(category_params)
-				post :create, category: category_params
-			end
+      it_behaves_like "#create, #update with valid arguments" do
+        let(:request) { post :create, category: category_params }
+      end
 
-			it_behaves_like "#create, #update with valid arguments" do
-				let(:request) { post :create, category: category_params }
-			end
+      it_behaves_like "#create, #update with invalid arguments" do
+        let(:request) { post :create, category: {title: ''} }
+        let(:templates) { :new }
+      end
 
-			it_behaves_like "#create, #update with invalid arguments" do
-				let(:request) { post :create, category: {title: ''} }
-				let(:templates) { :new }
-			end
+    end
 
-		end
+    context 'cancan doesnt allow :create' do
+      before do
+        ability.cannot :create, Category
+        post :create, category: category_params
+      end
+      it { expect(response).to redirect_to(root_path) }
+    end
 
-	end
+  end
 
-	describe 'PATCH #update' do
-		let(:category_params) { FactoryGirl.attributes_for(:category) }
-		let(:category) { FactoryGirl.create(:category) }
+  describe 'PATCH #update' do
+    let(:category_params) { FactoryGirl.attributes_for(:category) }
+    let(:category) { FactoryGirl.create(:category) }
 
-		before do
-			@params = {:id => '1', :category => category_params}
-			allow(Category).to receive(:find).and_return category
-			post :update, @params
-		end
+    before do
+      @params = {id: category.id, category: category_params}
+    end
 
-		it 'call #find' do
-			expect(Category).to receive(:find).with("1")
-			patch :update, @params
-		end
+    it_behaves_like "#create, #update with valid arguments" do
+      let(:request) { patch :update, @params }
+    end
 
-		it_behaves_like "#create, #update with valid arguments" do
-			let(:request) { patch :update, @params }
-		end
+    it_behaves_like "#create, #update with invalid arguments" do
+      let(:request) { patch :update, id: category.id, category: {title: ''} }
+      let(:templates) { :edit }
+    end
 
-		it_behaves_like "#create, #update with invalid arguments" do
-			let(:request) { patch :update, id: 3, category: {title: ''} }
-			let(:templates) { :edit }
-		end
+    context 'cancan doesnt allow :create' do
+      before do
+        ability.cannot :update, Category
+        patch :update, category_params.merge(id: category.id)
+      end
+      it { expect(response).to redirect_to(root_path) }
+    end
 
-	end
+  end
 
-	describe 'DELETE #destroy' do
-		let(:category) { FactoryGirl.create(:category) }
+  describe 'DELETE #destroy' do
+    let(:category) { FactoryGirl.create(:category) }
 
-		before do
-			allow(Category).to receive(:find).and_return category
-		end
+    before do
+      delete :destroy, id: category.id
+    end
 
-		it 'call #destroy' do
-			expect(Category).to receive_message_chain(:find, :destroy)
-			delete :destroy, id: 1
-		end
+    it 'redirect to :index' do
+      expect(response).to redirect_to(:admin_categories)
+    end
 
-		it 'redirect to :index' do
-			delete :destroy, id: 1
-			expect(response).to redirect_to(:admin_categories)
-		end
+    context 'cancan doesnt allow :create' do
+      before do
+        ability.cannot :destroy, Category
+      end
+      it { expect(response).to redirect_to(:admin_categories) }
+    end
 
-	end
-	
+  end
+
 end

@@ -2,11 +2,15 @@ require 'rails_helper'
 
 RSpec.describe Admin::BooksController, type: :controller do
 
-	before do
-		allow_message_expectations_on_nil
-		allow(controller).to receive(:check_login_user).and_return true
-		allow(controller).to receive(:check_admin).and_return true
-	end
+  let(:user) { FactoryGirl.create(:user) }
+  let(:ability) { Ability.new(user) }
+
+  before do
+    allow_message_expectations_on_nil
+    allow(controller).to receive(:current_ability).and_return(ability)
+    ability.can :manage, :all
+    sign_in user
+  end
 
 	shared_examples "#create, #update with valid arguments" do
 		describe 'redirect' do
@@ -36,31 +40,27 @@ RSpec.describe Admin::BooksController, type: :controller do
 		end
 	end
 
-	describe 'GET #index' do
+  describe 'GET #index' do
 
-		it 'use #all' do
-			expect(Book).to receive(:all)
-			get :index
-		end
+    context 'cancan doesnt allow :index' do
+      before do
+        ability.cannot :read, Book
+        get :index
+      end
+      it { expect(response).to redirect_to(root_path) }
+    end
 
-	end
+  end
 
 	describe 'GET #new' do
 
-		it 'use #new' do
-			expect(Book).to receive(:new)
-			get :new
-		end
-
-		it 'use #all category' do
-			expect(Category).to receive(:all)
-			get :new
-		end
-
-		it 'use #all author' do
-			expect(Author).to receive(:all)
-			get :new
-		end
+    context 'cancan doesnt allow :index' do
+      before do
+        ability.cannot :create, Book
+        get :new
+      end
+      it { expect(response).to redirect_to(root_path) }
+    end
 
 	end
 
@@ -72,36 +72,25 @@ RSpec.describe Admin::BooksController, type: :controller do
 			allow(Book).to receive(:find).and_return book
 		end
 
-		it 'use #find' do
-			expect(Book).to receive(:find)
-			get :edit, id: 1
-		end
-
-		it 'use #all category' do
-			expect(Category).to receive(:all)
-			get :new
-		end
-
-		it 'use #all author' do
-			expect(Author).to receive(:all)
-			get :new
-		end
+    context 'cancan doesnt allow :index' do
+      let(:book) { FactoryGirl.create(:book) }
+      before do
+        ability.cannot :update, Book
+        get :edit, id: book.id
+      end
+      it { expect(response).to redirect_to(root_path) }
+    end
 
 	end
 
 	describe 'POST #create' do
+    let(:book_params) { FactoryGirl.attributes_for(:book) }
 
-		context 'with valid attributes' do
-			let(:book_params) { FactoryGirl.attributes_for(:book) }
+    context 'with valid attributes' do
 
 			before do
 				allow(assigns(:book)).to receive(:save).and_return true
 				allow(assigns(:book)).to receive(:title).and_return ''
-			end
-
-			it 'receives new with params' do
-				expect(Book).to receive(:new).with(book_params)
-				post :create, book: book_params
 			end
 
 			it_behaves_like "#create, #update with valid arguments" do
@@ -113,7 +102,15 @@ RSpec.describe Admin::BooksController, type: :controller do
 				let(:templates) { :new }
 			end
 
-		end
+    end
+
+    context 'cancan doesnt allow :create' do
+      before do
+        ability.cannot :create, Book
+        post :create, book: book_params
+      end
+      it { expect(response).to redirect_to(root_path) }
+    end
 
 	end
 
@@ -122,24 +119,25 @@ RSpec.describe Admin::BooksController, type: :controller do
 		let(:book) { FactoryGirl.create(:book) }
 
 		before do
-			@params = {:id => '1', :book => book_params}
-			allow(Book).to receive(:find).and_return book
-			post :update, @params
-		end
-
-		it 'call #find' do
-			expect(Book).to receive(:find).with("1")
-			patch :update, @params
-		end
+      @params = { id: book.id, book: book_params }
+    end
 
 		it_behaves_like "#create, #update with valid arguments" do
 			let(:request) { patch :update, @params }
 		end
 
 		it_behaves_like "#create, #update with invalid arguments" do
-			let(:request) { patch :update, id: 3, book: {title: ''} }
+			let(:request) { patch :update, id: book.id, book: {title: ''} }
 			let(:templates) { :edit }
-		end
+    end
+
+    context 'cancan doesnt allow :create' do
+      before do
+        ability.cannot :update, Book
+        patch :update, book_params.merge(id: book.id)
+      end
+      it { expect(response).to redirect_to(root_path) }
+    end
 
 	end
 
@@ -147,16 +145,17 @@ RSpec.describe Admin::BooksController, type: :controller do
 		let(:book) { FactoryGirl.create(:book) }
 
 		before do
-			allow(Book).to receive(:find).and_return book
-		end
+      delete :destroy, id: book.id
+    end
 
-		it 'call #destroy' do
-			expect(Book).to receive_message_chain(:find, :destroy)
-			delete :destroy, id: 1
-		end
+    context 'cancan doesnt allow :create' do
+      before do
+        ability.cannot :destroy, Book
+      end
+      it { expect(response).to redirect_to(:admin_books) }
+    end
 
 		it 'redirect to :index' do
-			delete :destroy, id: 1
 			expect(response).to redirect_to(:admin_books)
 		end
 
