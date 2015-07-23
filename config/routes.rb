@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  devise_for :users, controllers: { omniauth_callbacks: 'auths' }
   #root path
   root 'books#index'
 
@@ -8,23 +9,15 @@ Rails.application.routes.draw do
   resources :carts, only: [:index, :create, :update, :destroy]
   resources :orders, only: [:index, :create, :update]
   resources :wish_lists, only: [:index, :show, :update, :destroy]
+  resources :ratings, only: [:create]
 
   namespace :admin do
     resources :categories, except: :show
     resources :authors, except: :show
     resources :books, except: [:show]
-    resources :reviews, only: [:index, :update, :destroy]
+    resources :ratings, only: [:index, :update, :destroy]
     resources :orders, only: [:index, :update]
   end
-
-  resources :users do
-    collection do
-      resources :auths, only: [:new, :create, :destroy]
-    end
-  end
-
-  post '/books/rate_book' => 'books#rate_book'
-  get '/auth/:provider/callback' => 'auths#log_facebook'
 
   get '/manager', to: redirect('admin/books')
 
