@@ -1,29 +1,15 @@
-class AuthsController < ApplicationController
+class AuthsController < Devise::OmniauthCallbacksController
 
-  def new
-  end
+  def facebook
+    @user = User.facebook_login(request.env['omniauth.auth'])
 
-  def create
-    user = User.find_by(email: params[:email].downcase)
-    if user && user.authenticate(params[:password])
-      flash[:success] = 'Hello ' << user.name
-      login user
-      redirect_to user_path user
+    if @user.persisted?
+      sign_in_and_redirect @user, :event => :authentication
+      set_flash_message(:notice, :success, :kind => 'Facebook') if is_navigational_format?
     else
-      flash.now[:errors] = 'User not found'
-      render 'new'
+      session['devise.facebook_data'] = request.env['omniauth.auth']
+      redirect_to new_user_registration_url
     end
-  end
-
-  def destroy
-    logout
-    redirect_to root_path
-  end
-
-  def log_facebook
-    user = User.facebook_login(request.env['omniauth.auth'])
-    login user
-    redirect_to user_path user
   end
 
 end

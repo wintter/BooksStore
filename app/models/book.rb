@@ -1,4 +1,4 @@
-class Book < ActiveRecord::Base
+ class Book < ActiveRecord::Base
   belongs_to :author
   belongs_to :category
   has_many :ratings
@@ -11,10 +11,10 @@ class Book < ActiveRecord::Base
 
     def search type, text
       if type.eql? '1'
-        Book.by_text text
+        by_text text
       else
         @author = Author.by_author text
-        Book.where(author: @author)
+        where(author: @author)
       end
     end
 
@@ -23,7 +23,7 @@ class Book < ActiveRecord::Base
       image.resize "170x200"
       image_name = "img_book" << id << ".png"
       image.write "#{Rails.root}/app/assets/images/" << image_name
-      Book.find(id).update_attribute(:image, image_name)
+      find(id).update_attribute(:image, image_name)
     end
 
   end

@@ -5,13 +5,13 @@
           <div class="font_opensans font_size_20 text_align_center">Delivery</div><br/>
 
           <%= label_tag '5', 'UPS Ground +5$' %>
-          <%= radio_button_tag 'delivery', '5', get_checked_value(session[:order_delivery], '5') %>
+          <%= radio_button_tag 'delivery', '5', get_checked_value(session['orderDelivery'], '5') %>
 
           <%= label_tag '5', 'UPS Two Dat +10$' %>
-          <%= radio_button_tag 'delivery', '10', get_checked_value(session[:order_delivery], '10') %>
+          <%= radio_button_tag 'delivery', '10', get_checked_value(session['orderDelivery'], '10') %>
 
           <%= label_tag '5', 'UPS One Day +15$' %>
-          <%= radio_button_tag 'delivery', '15', get_checked_value(session[:order_delivery], '15') %>
+          <%= radio_button_tag 'delivery', '15', get_checked_value(session['orderDelivery'], '15') %>
 
           <%= submit_tag 'Save and continue', class: "btn btn-large btn-register" %>
       <% end %>

@@ -1,6 +1,5 @@
 class Admin::CategoriesController < ApplicationController
   load_and_authorize_resource
-  skip_authorize_resource :only => [:new]
   layout 'admin/layouts/application'
 
   def index
@@ -22,7 +21,7 @@ class Admin::CategoriesController < ApplicationController
   end
 
   def update
-    if @category.update_attributes(categories_params)
+    if @category.update_attributes(category_params)
       flash[:success] = 'Category ' << @category.title << ' has successfully updated'
       redirect_to action: 'index'
     else
@@ -37,7 +36,7 @@ class Admin::CategoriesController < ApplicationController
 
   private
 
-    def categories_params
+    def category_params
       params.require(:category).permit(:title)
     end
 

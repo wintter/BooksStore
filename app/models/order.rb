@@ -10,16 +10,20 @@ class Order < ActiveRecord::Base
   end
 
   def create_order(user, address, credit_cards, delivery)
-    self.total_price = get_total_price(user, delivery)
+    self.total_price = Order.get_total_price(user, delivery)
     self.create_credit_card(credit_cards)
     self.create_address(address)
     self.user = user
     self.save
   end
 
-  def get_total_price(user, delivery)
-    items_price = Cart.where(user: user).first.cart_items.map { |item| item.quantity*item.book.price }
-    items_price.inject(&:+) + delivery.to_i || 0
+  class << self
+
+    def get_total_price(user, delivery)
+      items_price = Cart.where(user: user).first.cart_items.map { |item| item.quantity*item.book.price }
+      items_price.inject(&:+) + delivery.to_i || 0
+    end
+
   end
 
 end

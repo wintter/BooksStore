@@ -1,6 +1,6 @@
 class CartsController < ApplicationController
   before_action :create
-  before_action :check_login_user, only: [:index, :create, :update, :destroy]
+  authorize_resource
 
   def index
     @items = @cart.cart_items.order(quantity: :desc)
@@ -11,21 +11,23 @@ class CartsController < ApplicationController
   end
 
   def update
-    cart_item = @cart.cart_items.where(book_id: params[:id]).first
-    if cart_item
-      cart_item.increment!(:quantity)
+    @book = Book.find(params[:id])
+    @cart_item = @cart.cart_items.where(book: @book).first
+    if @cart_item
+      @cart_item.increment!(:quantity)
     else
-      @cart.cart_items << CartItem.new(cart: @cart, book_id: params[:id], quantity: 1)
+      @cart.cart_items << CartItem.new(cart: @cart, book: @book, quantity: 1)
     end
-    flash[:success] = 'Book "'<< Book.find(params[:id]).title << '" has added to cart'
+    flash[:success] = 'Book "'<< @book.title << '" has added to cart'
     redirect_to(:back)
   end
 
   def destroy
-    if params[:reduce] && CartItem.find(params[:id]).quantity != 1
-      CartItem.find(params[:id]).decrement!(:quantity)
+    @cart_items = CartItem.find(params[:id])
+    if params[:reduce] && @cart_items.quantity != 1
+      @cart_items.decrement!(:quantity)
     else
-      CartItem.find(params[:id]).destroy
+      @cart_items.destroy
     end
     redirect_to action: 'index'
   end

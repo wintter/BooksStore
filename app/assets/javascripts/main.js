@@ -43,8 +43,15 @@ $(document).on('keyup', '.search', function() {
 $(document).on('rating.change', function(event, value) {
     $.ajax({
         type: "POST",
-        data: { rate : { rating_number: value, book_id: $('#rating_star_book').attr('data-book-id'), user_id: $('#rating_star_book').attr('data-user-id') } },
+        data: { rating_number: value, book_id: $('#rating_star_book').attr('data-book-id'), user_id: $('#rating_star_book').attr('data-user-id') },
         dataType: "json",
-        url: "/books/rate_book"
+        url: "/ratings"
     });
+});
+
+$(document).on('submit', '.rating_form', function(event) {
+    if($('textarea#review').val().length == 0) {
+        event.preventDefault();
+        alert('Write a review');
+    }
 });

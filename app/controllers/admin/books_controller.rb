@@ -1,19 +1,14 @@
 class Admin::BooksController < ApplicationController
   load_and_authorize_resource
-  skip_authorize_resource :only => [:new]
   layout 'admin/layouts/application'
 
   def index
   end
 
   def new
-    @categories = Category.all
-    @authors = Author.all
   end
 
   def edit
-    @categories = Category.all
-    @authors = Author.all
   end
 
   def create
@@ -22,8 +17,6 @@ class Admin::BooksController < ApplicationController
       flash[:success] = 'Book ' << @book.title << ' has successfully created'
       redirect_to action: 'index'
     else
-      @categories = Category.all
-      @authors = Author.all
       render 'new'
     end
   end

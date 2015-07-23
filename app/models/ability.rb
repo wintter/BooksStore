@@ -8,9 +8,11 @@ class Ability
        if user.admin?
          can :manage, :all
        else
-         can :read, User, :id => user.id
-         can :update, User, :id => user.id
-         can :create, User
+         can :read, Book
+         can :create, Rating
+         can :read, Author
+         can :manage, Cart
+         can :manage, Order
        end
     #
     # The first argument to `can` is the action you are giving the user

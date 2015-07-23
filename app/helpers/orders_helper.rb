@@ -8,6 +8,18 @@ module OrdersHelper
     end
   end
 
+  def check_valid_request(entity, params)
+    @info = entity.new(params)
+    session['order' + entity.to_s] = @info.attributes
+    if @info.valid?
+      true
+    else
+      @address = @info if entity.eql? Address
+      @credit_card = @info if entity.eql? CreditCard
+      false
+    end
+  end
+
   def get_checked_value(entity, type)
     true if type.eql?('5') || entity.eql?(type)
   end

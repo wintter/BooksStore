@@ -27,16 +27,16 @@
           <div class="col-md-6">
             <br/><span>Address information</span> <br/><span class="label label-success">Success</span>
             <div class="bs-callout bs-callout-info" id="callout-navs-tabs-plugin">
-              <% remove_key(session[:order_address]).each do |key, value| %>
+              <% remove_key(session['orderAddress']).each do |key, value| %>
                   <%= key %>: <span class="color_slider_top font_weight_600"><%= value %></span><hr>
               <% end %>
             </div>
-            <div>Additional <%= session[:order_delivery] %>$ for delivery</div><br/>
+            <div>Additional <%= session['orderDelivery'] %>$ for delivery</div><br/>
           </div>
           <div class="col-md-6">
             <br/><span>Credit Card information</span> <br/><span class="label label-success">Success</span>
             <div class="bs-callout bs-callout-info" id="callout-navs-tabs-plugin">
-              <% remove_key(session[:order_credit_card]).each do |key, value| %>
+              <% remove_key(session['orderCreditCard']).each do |key, value| %>
                   <%= key %>: <span class="color_slider_top font_weight_600"><%= value %></span><hr>
               <% end %>
             </div>

@@ -1,6 +1,5 @@
 class Admin::AuthorsController < ApplicationController
   load_and_authorize_resource
-  skip_authorize_resource :only => [:new]
   layout 'admin/layouts/application'
 
   def index

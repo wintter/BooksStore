@@ -65,10 +65,10 @@
   <div class="row text_align_center padding_top_20">
     <a class="font_size_20" data-toggle="collapse" href="#collapseExample">Write a review <span class="caret"></span></a>
 
-    <%= form_tag(books_rate_book_path, class: 'collapse font_opensans', id: 'collapseExample') do %>
-        <%= text_field_tag 'rate[book_id]', @book.id, style: 'visibility:hidden;' %>
-        <%= text_field_tag 'rate[user_id]', current_user.id, style: 'visibility:hidden;' %>
-        <%= text_area_tag 'rate[review]', nil, cols:10, rows:10, placeholder: 'Enter your review' %>
+    <%= form_tag(ratings_path, class: 'collapse font_opensans rating_form', id: 'collapseExample') do %>
+        <%= text_field_tag 'book_id', @book.id, style: 'visibility:hidden;' %>
+        <%= text_field_tag 'user_id', current_user.id, style: 'visibility:hidden;' %>
+        <%= text_area_tag 'review', nil, cols:10, rows:10, placeholder: 'Enter your review' %>
         <%= submit_tag 'Write a review', class: "btn btn-register col-md-4 col-md-offset-4" %>
     <% end %>
 

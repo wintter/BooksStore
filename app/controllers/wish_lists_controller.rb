@@ -1,6 +1,5 @@
 class WishListsController < ApplicationController
   rescue_from ActiveRecord::RecordNotUnique, with: :record_not_unique
-  before_action :check_login_user, only: [:index, :create]
 
   def show
     @user = User.find(params[:id])

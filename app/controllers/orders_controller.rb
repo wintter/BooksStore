@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :check_login_user, only: [:index, :create]
+  authorize_resource
 
   def index
     @items = Order.where(user: current_user.id)
@@ -9,7 +9,7 @@ class OrdersController < ApplicationController
     @cart = Cart.where(user: current_user).first
 
     @order = Order.new
-    @order.create_order(current_user, session[:order_address], session[:order_credit_card], session[:order_delivery])
+    @order.create_order(current_user, session['orderAddress'], session['orderCreditCard'], session['orderDelivery'])
 
     @cart.cart_items.each do |item|
       OrderItem.create(quantity: item.quantity, book: item.book, order: @order)
@@ -21,29 +21,20 @@ class OrdersController < ApplicationController
   end
 
   def update
-    session[:order_step] = params[:step]
-    case session[:order_step]
+    case params[:step]
       when '1' #start orders, fill address field
         @address = Address.new
         render :order_address
       when '2' #save address
-        @address = Address.new(order_address_params)
-          if @address.valid?
-            session[:order_address] = @address.attributes
-            render :order_delivery
-          else
-            render :order_address
-          end
+        check_valid_request(Address, order_address_params) ? (render :order_delivery) : (render :order_address)
       when '3' #save delivery
-        session[:order_delivery] = params[:delivery]
+        session['orderDelivery'] = params[:delivery]
         @credit_card = CreditCard.new
         render :order_payment
       when '4' #save credit card
-        @credit_card = CreditCard.new(order_credit_cards_params)
-        if @credit_card.valid?
-          session[:order_credit_card] = @credit_card.attributes
-          @items = Cart.where(user: current_user).first.cart_items.order(quantity: :desc)
-          @total_price = Order.new.get_total_price(current_user, session[:order_delivery])
+        if check_valid_request(CreditCard, order_credit_cards_params)
+          @items = cart_items
+          @total_price = Order.get_total_price(current_user, session[:order_delivery])
           render :order_confirm
         else
           render :order_payment

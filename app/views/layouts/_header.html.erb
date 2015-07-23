@@ -1,13 +1,15 @@
 <div class="col-md-12">
   <div class="row padding_top_60">
     <div class="col-md-4 col-md-offset-1">
-      <%= link_to image_tag("logo.png"), controller:'books', action:'index'  %>
+      <%= link_to image_tag("logo.png"), root_path %>
     </div>
     <div class="col-md-3 col-md-offset-1">
       <div style="font-weight:300;" class="font_size_20">
-        <%= 'Welcome to BooksStore ' << current_user.name if login? %><br/>
-        <%= 'Account email: ' << current_user.email if login? %><br/>
-        <%= link_to 'Admin panel', admin_books_path if login? %>
+        <% if user_signed_in? %>
+        <%= 'Welcome to BooksStore ' << current_user.name %><br/>
+        <%= 'Account email: ' << current_user.email %><br/>
+        <%= link_to 'Admin panel', admin_books_path %>
+        <% end %>
       </div>
     </div>
     <div class="col-md-2">
@@ -31,27 +33,26 @@
 
        <div class="col-md-6">
       <ul class="font_opensans color_white ul_header">
-        <% if login? %>
+        <% if user_signed_in? %>
             <li><%= link_to 'My account', '#', id: 'dLabel', class: 'li_header_acc', :'data-toggle' => 'dropdown' %>
               <span class="caret"></span>
               <ul class="dropdown-menu" aria-labelledby="dLabel" style="margin-left:150px;color:black;">
-                <%= link_to "Profile", user_path(current_user) %><br/>
-                <%= link_to "Settings", edit_user_path(current_user) %><br/>
-                <%= link_to "Logout", auth_path(current_user), id:'logout', method: :delete %>
+                <%= link_to "Settings", edit_user_registration_path(current_user), id: 'user_settings' %><br/>
+                <%= link_to "Logout", destroy_user_session_path(current_user), id:'logout', method: :delete %>
               </ul>
             </li>
         <% else %>
         <li><%= link_to 'My account', '#', id: 'dLabel', class: 'li_header_acc', :'data-toggle' => 'dropdown' %>
           <span class="caret"></span>
           <ul class="dropdown-menu" aria-labelledby="dLabel" style="margin-left:150px;color:black;">
-            <%= link_to "Register", new_user_path %><br/>
-            <%= link_to "Login", new_auth_path %><br/>
-            <%= link_to "Login with Facebook", 'auth/facebook' %>
+            <%= link_to "Register", new_user_registration_path %><br/>
+            <%= link_to "Login", new_user_session_path %><br/>
+            <%= link_to "Login with Facebook", user_omniauth_authorize_path(:facebook) %>
           </ul>
         </li>
         <% end %>
         <li><%= link_to "Shopping cart", carts_path %></li>
-        <li><%= link_to "Wish list", wish_list_path(current_user) if login? %></li>
+        <li><%= link_to "Wish list", wish_list_path(current_user) if user_signed_in? %></li>
         <li><%= link_to "My orders", orders_path %></li>
       </ul>
     </div>
