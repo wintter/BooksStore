@@ -5,7 +5,8 @@ else
   code = '1619406021650927'
   secret_key = '68ca7c28f6d8b62e59bf994615308f4f'
 end
+
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :facebook, code, secret_key,
-           :scope => 'email', :info_fields => 'email, name'
+  provider :facebook, code, secret_key, provider_ignores_state: true, scope: 'email', info_fields: 'email, name'
 end
+

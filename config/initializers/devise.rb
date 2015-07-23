@@ -247,7 +247,8 @@ Devise.setup do |config|
     secret_key = '68ca7c28f6d8b62e59bf994615308f4f'
   end
 
-  config.omniauth :facebook, code, secret_key,provider_ignores_state: true, scope: 'email', info_fields: 'email, name'
+
+  config.omniauth :facebook, code, secret_key
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
