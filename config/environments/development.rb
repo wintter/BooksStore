@@ -38,8 +38,4 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-
-  ENV['FB_CODE'] = '1619406021650927'
-  ENV['FB_SECRET'] = '68ca7c28f6d8b62e59bf994615308f4f'
-
 end

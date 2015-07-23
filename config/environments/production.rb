@@ -76,8 +76,4 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  ENV['FB_CODE'] = '412182575633605'
-  ENV['FB_SECRET'] = '05a765cea352c7bd2df2bdcb22cb8f73'
-
 end
