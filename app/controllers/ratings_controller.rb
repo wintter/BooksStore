@@ -1,5 +1,5 @@
 class RatingsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource
 
   def create
     @rating = Rating.find_or_initialize_by(book_id: params[:book_id], user_id: params[:user_id])
