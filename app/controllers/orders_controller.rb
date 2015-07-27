@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   load_and_authorize_resource through: :current_user, only: :index
-  authorize_resource
+  #authorize_resource
   include Wicked::Wizard
   steps :order_address, :order_delivery, :order_payment, :order_confirm
 
