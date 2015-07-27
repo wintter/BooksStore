@@ -29,6 +29,8 @@ gem 'omniauth-facebook'
 gem 'mini_magick'
 gem 'cancancan'
 gem 'devise'
+gem 'carrierwave'
+gem 'wicked'
 
 group :development do
   gem 'sqlite3'

@@ -10,7 +10,7 @@ module OrdersHelper
 
   def check_valid_request(entity, params)
     @info = entity.new(params)
-    session['order' + entity.to_s] = @info.attributes
+    session['order_' + entity.to_s.downcase!] = @info.attributes
     if @info.valid?
       true
     else

@@ -9,10 +9,12 @@ class Ability
          can :manage, :all
        else
          can :read, Book
-         can :create, Rating
+         can :manage, Rating
          can :read, Author
          can :manage, Cart
-         can :manage, Order
+         can :manage, Order do |order|
+           order.user == user
+         end
        end
     #
     # The first argument to `can` is the action you are giving the user

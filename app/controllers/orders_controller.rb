@@ -1,47 +1,49 @@
 class OrdersController < ApplicationController
+  load_and_authorize_resource through: :current_user, only: :index
   authorize_resource
+  include Wicked::Wizard
+  steps :order_address, :order_delivery, :order_payment, :order_confirm
 
   def index
-    @items = Order.where(user: current_user.id)
+  end
+
+  def show
+    case step
+      when :order_address
+        @address = Address.new
+      when :order_delivery
+      when :order_payment
+         @credit_card = CreditCard.new
+      else
+      @items = cart_items
+      @total_price = Order.get_total_price(current_user, session[:order_delivery])
+    end
+    render_wizard
   end
 
   def create
-    @cart = Cart.where(user: current_user).first
-
+    @cart = current_user.cart
     @order = Order.new
-    @order.create_order(current_user, session['orderAddress'], session['orderCreditCard'], session['orderDelivery'])
-
-    @cart.cart_items.each do |item|
-      OrderItem.create(quantity: item.quantity, book: item.book, order: @order)
-    end
-
-    CartItem.where(cart: @cart).destroy_all
+    @order.create_order(current_user, session['order_address'],
+                        session['order_creditcard'], session['order_delivery'], @cart)
+    @cart.cart_items.destroy_all
     flash[:success] = 'Your order has successfully created'
     redirect_to root_path
   end
 
   def update
-    case params[:step]
-      when '1' #start orders, fill address field
-        @address = Address.new
-        render :order_address
-      when '2' #save address
-        check_valid_request(Address, order_address_params) ? (render :order_delivery) : (render :order_address)
-      when '3' #save delivery
-        session['orderDelivery'] = params[:delivery]
-        @credit_card = CreditCard.new
-        render :order_payment
-      when '4' #save credit card
-        if check_valid_request(CreditCard, order_credit_cards_params)
-          @items = cart_items
-          @total_price = Order.get_total_price(current_user, session[:order_delivery])
-          render :order_confirm
+      case step
+        when :order_address
+          @check = check_valid_request(Address, order_address_params)
+        when :order_delivery
+          session['order_delivery'] = params[:delivery]
+          @check = true if order_delivery_params
+        when :order_payment
+          @check = check_valid_request(CreditCard, order_credit_cards_params)
         else
-          render :order_payment
-        end
-      else
         create
-    end
+      end
+      @check ? (redirect_to next_wizard_path) : (render_wizard)
   end
 
   private
@@ -52,6 +54,11 @@ class OrdersController < ApplicationController
 
     def order_credit_cards_params
       params.require(:credit_card).permit(:number, :CVV, :expiration_month, :expiration_year, :first_name, :last_name)
+    end
+
+    def order_delivery_params
+      delivery = %w'5 10 15'
+      true if delivery.include? session['order_delivery']
     end
 
 end

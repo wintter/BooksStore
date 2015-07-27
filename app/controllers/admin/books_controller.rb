@@ -13,7 +13,6 @@ class Admin::BooksController < ApplicationController
 
   def create
     if @book.save
-      Book.save_image params[:book][:image], @book.id if params[:book][:image]
       flash[:success] = 'Book ' << @book.title << ' has successfully created'
       redirect_to action: 'index'
     else
@@ -23,7 +22,6 @@ class Admin::BooksController < ApplicationController
 
   def update
     if @book.update_attributes(book_params)
-      Book.save_image params[:book][:image], params[:id] if params[:book][:image]
       flash[:success] = 'Book ' << @book.title << ' has successfully updated'
       redirect_to action: 'index'
     else
@@ -39,7 +37,7 @@ class Admin::BooksController < ApplicationController
   private
 
     def book_params
-      params.require(:book).permit(:title, :description, :price, :in_stock, :category_id, :author_id)
+      params.require(:book).permit(:title, :description, :price, :in_stock, :category_id, :author_id, :cover)
     end
 
 end

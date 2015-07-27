@@ -4,6 +4,7 @@ RSpec.describe Order, type: :model do
 
   let(:subject) { FactoryGirl.create(:order) }
   let(:user) { FactoryGirl.create(:user) }
+  let(:cart) { user.cart = FactoryGirl.create(:cart) }
   let(:delivery) { '5' }
 
   it { expect(subject).to have_many :order_items }
@@ -16,6 +17,7 @@ RSpec.describe Order, type: :model do
 
     before do
       allow(Order).to receive(:get_total_price)
+      cart.cart_items.push FactoryGirl.create(:cart_item)
     end
 
     let(:address) { FactoryGirl.attributes_for(:address) }
@@ -23,35 +25,27 @@ RSpec.describe Order, type: :model do
 
     it 'Order receive #get_total_price' do
       expect(Order).to receive(:get_total_price)
-      subject.create_order(user, address, credit_card, delivery)
+      subject.create_order(user, address, credit_card, delivery, cart)
     end
 
     it 'call #total_price' do
       expect(subject).to receive(:total_price)
-      subject.create_order(user, address, credit_card, delivery)
+      subject.create_order(user, address, credit_card, delivery, cart)
     end
 
     it 'call #create_credit_card' do
       expect(subject).to receive(:create_credit_card)
-      subject.create_order(user, address, credit_card, delivery)
+      subject.create_order(user, address, credit_card, delivery, cart)
     end
 
     it 'call #create_address' do
       expect(subject).to receive(:create_address)
-      subject.create_order(user, address, credit_card, delivery)
+      subject.create_order(user, address, credit_card, delivery, cart)
     end
 
-  end
-
-  context '.get_total_price' do
-
-    before do
-      allow(Cart).to receive_message_chain(:where, :first, :cart_items, :map, :inject, :+)
-    end
-
-    it '#where with user' do
-      expect(Cart).to receive(:where).with(user: user)
-      Order.get_total_price(user, delivery)
+    it 'create order item' do
+      expect(OrderItem).to receive(:create)
+      subject.create_order(user, address, credit_card, delivery, cart)
     end
 
   end

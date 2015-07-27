@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 container_profile">
-      <% unless @items.empty? %>
+      <% unless @cart_items.empty? %>
           <table class="table table-bordered font_opensans background_white">
             <caption class="font_size_25 text_align_center">Shopping Cart</caption>
             <thead>
@@ -14,14 +14,14 @@
               <td>REMOVE</td>
             </tr>
             </thead>
-            <% @items.each do |item| %>
+            <% @cart_items.each do |item| %>
                 <tr class="text_align_center">
-                  <td><%= link_to image_tag(item.book.image, height: '70', width: '60') %></td>
+                  <td><%= link_to image_tag(item.book.cover, height: '70', width: '60') %></td>
                   <td><%= link_to item.book.title, item.book, class: 'color_black font_sie_14' %></td>
                   <td>
-                    <%= link_to raw('<i class="glyphicon glyphicon-minus color_slider_top"></i>'), url_for(action: :destroy, id: item.id, reduce: true), method: :delete %>
+                    <%= link_to raw('<i class="glyphicon glyphicon-minus color_slider_top"></i>'), url_for(action: :destroy, id: item, reduce: true), method: :delete %>
                     <%= item.quantity %>
-                    <%= link_to raw('<i class="glyphicon glyphicon-plus color_slider_top"></i>'), url_for(controller: :carts, action: :update, id: item.book.id), method: :patch %>
+                    <%= link_to raw('<i class="glyphicon glyphicon-plus color_slider_top"></i>'), url_for(controller: :cart_items, action: :update, id: item), method: :patch %>
                   </td>
                   <td class="color_slider_top font_size_20 font_weight_900">$<%= item.book.price %></td>
                   <td class="color_slider_top font_size_20 font_weight_900">$<%= item.book.price * item.quantity %></td>
@@ -32,7 +32,7 @@
             <% end %>
           </table>
             <br/>
-          <%= link_to 'Save and continue', order_path(current_user, step: 1), method: :patch, class: 'link_order col-md-offset-5' %>
+          <%= link_to 'Save and continue', order_path(id: :order_address), method: :get, class: 'link_order col-md-offset-5' %>
 
       <% else %>
           <div class="text_align_center font_opensans font_size_25 font_weight_600">Shopping cart is empty</div>

@@ -6,9 +6,9 @@ Rails.application.routes.draw do
 
   #routes app
   resources :books, only: [:index, :show]
-  resources :carts, only: [:index, :create, :update, :destroy]
-  resources :orders, only: [:index, :create, :update]
-  resources :wish_lists, only: [:index, :show, :update, :destroy]
+  resources :cart_items, only: [:index, :update, :destroy]
+  resources :orders, only: [:index, :show, :create, :update, ]
+  resources :wish_lists, only: [:index, :destroy]
   resources :ratings, only: [:create]
 
   namespace :admin do
@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     resources :orders, only: [:index, :update]
   end
 
+  get '/add_to_cart', to: 'books#add_to_cart'
+  get '/add_to_wish_list', to: 'books#add_to_wish_list'
   get '/manager', to: redirect('admin/books')
 
 

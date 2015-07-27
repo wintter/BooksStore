@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   include OrdersHelper
-  include CartsHelper
+  include CartItemsHelper
 
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, :alert => exception.message
@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
 
     def configure_permitted_parameters
       devise_parameter_sanitizer.for(:sign_up) << :name
+    end
+
+    def initialize_cart
+      @cart = Cart.where(user: current_user).first_or_create
     end
 
 end

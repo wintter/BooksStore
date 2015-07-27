@@ -1,22 +1,18 @@
 <div class="container">
   <div class="col-md-12 font_size_14">
     <br/>
-    <div class="font_opensans font_size_25">All user wish list</div>
+    <div class="font_opensans font_size_25">My wish list</div><br/>
     <hr>
     <br/>
-    <% @books.each do |book| %>
-        <% next if book.users.empty? %>
+    <% @wish_lists.each do |wish| %>
         <div class="row container_profile font_size_17">
-          <div class="col-md-6">
-            <%= link_to image_tag(book.image, height: '70', width: '60') %>
-            <%= link_to book.title, book, class: 'color_black font_sie_14' %> /
-            <span class="color_slider_top font_weight_900">$<%= book.price %></span>
+          <div class="col-md-11">
+            <%= link_to image_tag(wish.book.cover, height: '70', width: '60') %>
+            <%= link_to wish.book.title, wish.book, class: 'color_black font_sie_14' %> /
+            <span class="color_slider_top font_weight_900">$<%= wish.book.price %></span>
           </div>
-          <div class="col-md-6">
-            Users who added this book to wish list:<br/>
-            <% book.users.each do |user| %>
-                <%= user.name %> /
-            <% end %>
+          <div class="col-md-1">
+            <%= link_to raw('<i class="glyphicon glyphicon-remove font_size_28 padding_top_20"> </i><br/>'), url_for(action: :destroy, id: wish), method: :delete, data: {confirm: "Delete this books from wish list ?"} %>
           </div>
         </div>
     <% end %>

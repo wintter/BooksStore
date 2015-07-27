@@ -7,38 +7,13 @@ $(document).on('click', '.category_id a', function() {
     $('.category_name').text($(this).data('title'));
     $.ajax({
         type: "GET",
-        data: {id: cat_id},
+        data: {category_id: cat_id},
         dataType: "html",
         url: "/books",
         success: function(response) {
             $('.all_books').html(response);
         }
     });
-});
-$(document).on('click', '.link_credit_card', function() {
-    if($('.credit_carts_forms').hasClass('hide')) {
-        $('.credit_carts_forms').removeClass('hide');
-    } else {
-        $('.credit_carts_forms').addClass('hide');
-    }
-});
-$(document).on('click', '.search_icon', function() {
-        $('[data-toggle="popover"]').popover('show');
-});
-$(document).on('click', '.check_search input', function() {
-        $('.search').attr('data-search-type', $(this).val());
-});
-$(document).on('keyup', '.search', function() {
-    var type_search = $('.search').attr('data-search-type');
-        $.ajax({
-            type: "GET",
-            data: { text: $('.search').val(), type: type_search },
-            dataType: "html",
-            url: "/books",
-            success: function(response) {
-               $('.all_books').html(response);
-            }
-        });
 });
 $(document).on('rating.change', function(event, value) {
     $.ajax({
@@ -48,7 +23,6 @@ $(document).on('rating.change', function(event, value) {
         url: "/ratings"
     });
 });
-
 $(document).on('submit', '.rating_form', function(event) {
     if($('textarea#review').val().length == 0) {
         event.preventDefault();

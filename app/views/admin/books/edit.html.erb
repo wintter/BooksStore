@@ -13,9 +13,9 @@
 
         <%= f.text_field :in_stock, placeholder: 'Enter couns books' %>
 
-        <%= image_tag @book.image %>
+        <%= image_tag @book.cover %>
 
-        <%= f.file_field :image, multipart: true %>
+        <%= f.file_field :cover, multipart: true %>
 
         <%= f.label 'Change book category' %>
         <%= select_tag('book[category_id]', options_from_collection_for_select(@categories, :id, :title, @book.category.id)) %>

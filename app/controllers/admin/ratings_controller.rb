@@ -1,9 +1,9 @@
 class Admin::RatingsController < ApplicationController
+  before_filter :find_approved_ratings, only: :index
   load_and_authorize_resource
   layout 'admin/layouts/application'
 
   def index
-    @ratings = Rating.approved
   end
 
   def update
@@ -16,5 +16,11 @@ class Admin::RatingsController < ApplicationController
     @rating.destroy
     redirect_to action: 'index'
   end
+
+  private
+
+    def find_approved_ratings
+      @ratings = Rating.approved
+    end
 
 end

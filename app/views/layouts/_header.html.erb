@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="col-md-2">
-      <%= link_to raw('<i class="glyphicon glyphicon-shopping-cart shop_cart"></i>'), carts_path %>
+      <%= link_to raw('<i class="glyphicon glyphicon-shopping-cart shop_cart"></i>'), cart_items_path %>
     </div>
   </div>
 </div>
@@ -51,19 +51,24 @@
           </ul>
         </li>
         <% end %>
-        <li><%= link_to "Shopping cart", carts_path %></li>
-        <li><%= link_to "Wish list", wish_list_path(current_user) if user_signed_in? %></li>
+        <li><%= link_to "Shopping cart", cart_items_path %></li>
+        <li><%= link_to "Wish list", wish_lists_path if user_signed_in? %></li>
         <li><%= link_to "My orders", orders_path %></li>
       </ul>
     </div>
 
     <div class="col-md-2">
-      <input type="text" name="search" class="search" placeholder="Search.." data-container="body"
-      data-search-type = "1" data-toggle="popover" data-html="true" data-placement="top"
-      title="<span class='font_opensans'>Change type of search</span>"
-      data-content="<div style='display: inline-flex;width:170px;' class='check_search'>Title <input
-      type='radio' name='r_search' value='1'>Author <input type='radio' name='r_search' value='2'></div>">
-      <i class="glyphicon glyphicon-search search_icon"></i>
+      <% if params[:controller] == 'books' && params[:action] == 'index' %>
+      <%= form_tag({controller: 'books', action: 'index'}, method: 'get', class: 'font_opensans') do %>
+          <%= radio_button_tag(:type, '1', true, class: 'width_15 font_weight_600') %>
+          <%= label_tag(:book, 'book', class: 'color_white') %>
+          <%= radio_button_tag(:type, '2', false, class: 'width_15') %>
+          <%= label_tag(:author, 'author', class: 'color_white') %>
+          <%= text_field_tag(:search, nil, class: 'search', placeholder: 'Search') %>
+          <%= button_tag(type: 'submit', class: 'glyphicon glyphicon-search search_icon') do %>
+          <% end %>
+      <% end %>
+          <% end %>
     </div>
 
   </div>

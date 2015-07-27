@@ -3,24 +3,26 @@
 
     <div class="col-md-4 col-md-offset-4">
 
-      <%= form_for @credit_card, url: order_path(current_user, step: 4), method: :patch, html: {class: 'font_opensans form_register'} do |f| %>
+      <%= form_for @credit_card, url: wizard_path, method: :patch, html: {class: 'font_opensans form_register'} do |f| %>
           <div class="font_opensans text_align_center font_weight_600">Fill credit card informtion</div><br/>
 
           <%= render 'shared/error_order', entity: @credit_card %>
 
-          <%= f.text_field :number, value: get_session_value('orderCreditCard', 'number'), placeholder: 'Number' %>
-          <%= f.text_field :CVV, value: get_session_value('orderCreditCard', 'CVV'), placeholder: 'CVV' %>
-          <%= f.text_field :first_name, value: get_session_value('orderCreditCard', 'first_name'), placeholder: 'First name' %>
-          <%= f.text_field :last_name, value: get_session_value('orderCreditCard', 'last_name'), placeholder: 'Last name' %>
+          <%= f.text_field :number, value: get_session_value('order_creditcard', 'number'), placeholder: 'Number' %>
+          <%= f.text_field :CVV, value: get_session_value('order_creditcard', 'CVV'), placeholder: 'CVV' %>
+          <%= f.text_field :first_name, value: get_session_value('order_creditcard', 'first_name'), placeholder: 'First name' %>
+          <%= f.text_field :last_name, value: get_session_value('order_creditcard', 'last_name'), placeholder: 'Last name' %>
 
           <%= label_tag 'Expiration month' %>
-          <%= f.select :expiration_month, 1..12, selected: get_session_value('orderCreditCard', 'expiration_month') %>
+          <%= f.select :expiration_month, 1..12, selected: get_session_value('order_creditcard', 'expiration_month') %>
 
           <%= label_tag 'Expiration year' %>
-          <%= f.select :expiration_year, Date.today.year - 5.. Date.today.year + 5, selected: get_session_value('orderCreditCard', 'expiration_year') %>
+          <%= f.select :expiration_year, Date.today.year - 5.. Date.today.year + 5, selected: get_session_value('order_creditcard', 'expiration_year') %>
 
           <%= f.submit 'Save and continue', class: 'btn btn-large btn-register' %>
       <% end %>
+
+      <%= link_to 'Back', previous_wizard_path %>
 
     </div>
   </div>

@@ -1,8 +1,8 @@
 class RatingsController < ApplicationController
-  authorize_resource
+  before_filter :find_or_initialize_rating
+  load_and_authorize_resource
 
   def create
-    @rating = Rating.find_or_initialize_by(book_id: params[:book_id], user_id: params[:user_id])
     @rating.update_attributes(rating_params)
     if params[:rating_number]
       render json: 1
@@ -13,6 +13,10 @@ class RatingsController < ApplicationController
   end
 
   private
+
+    def find_or_initialize_rating
+      @rating = Rating.find_or_initialize_by(book_id: params[:book_id], user_id: params[:user_id])
+    end
 
     def rating_params
       params.permit(:rating_number, :book_id, :user_id, :review)

@@ -60,35 +60,19 @@ namespace :db_populate do
     end
   end
 
-  task :address => :environment do
-    billing_address = Faker::Address.street_name
-    shipping_address = Faker::Address.street_address
-    user_id = 11
-    Address.create!(billing_address: billing_address, shipping_address: shipping_address,
-                    user_id: user_id)
-  end
-
-  task :credit_card => :environment do
-    2.times do
-      number = Faker::Business.credit_card_number
-      CVV_card = rand(100..999)
-      expiration_month = Time.now
-      expiration_year = Time.now
-      firstname = 'Bob'
-      lastname = 'Boba'
-      user_id = 11
-      CreditCard.create!(number: number, CVV: CVV_card, expiration_month: expiration_month,
-                         expiration_year: expiration_year, first_name: firstname,
-                         last_name: lastname, user_id: user_id)
-    end
-  end
-
   task :wish_list => :environment do
     30.times do
       user_id = rand(1..11)
       book_id = rand(1..11)
-      user = User.find(user_id)
-      user.books.push Book.find(book_id)
+      WishList.create(user: user_id, book: book_id)
+    end
+  end
+
+  task :order_states => :environment do
+    possible_states = ['in progress', 'in queue', 'in delivery', 'delivered', 'canceled']
+    5.times do |i|
+      name_state = possible_states[i]
+      OrderState.create!(state: name_state)
     end
   end
 

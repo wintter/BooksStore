@@ -10,7 +10,6 @@ RSpec.describe User, type: :model do
     it { expect(subject).to have_many :ratings }
     it { expect(subject).to have_many :orders }
     it { expect(subject).to have_one :cart }
-    it { expect(subject).to have_and_belong_to_many :books }
 
   describe '#facebook_login' do
 
