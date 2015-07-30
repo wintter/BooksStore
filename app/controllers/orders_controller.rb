@@ -1,8 +1,9 @@
 class OrdersController < ApplicationController
-  load_and_authorize_resource through: :current_user, only: :index
-  #authorize_resource
+  load_and_authorize_resource only: :index
+  authorize_resource
   include Wicked::Wizard
   steps :order_address, :order_delivery, :order_payment, :order_confirm
+  layout 'layouts/order', except: :index
 
   def index
   end
@@ -15,8 +16,8 @@ class OrdersController < ApplicationController
       when :order_payment
          @credit_card = CreditCard.new
       else
-      @items = cart_items
-      @total_price = Order.get_total_price(current_user, session[:order_delivery])
+        @items = cart_items
+        @total_price = Order.get_total_price(current_user, session[:order_delivery])
     end
     render_wizard
   end
@@ -49,7 +50,7 @@ class OrdersController < ApplicationController
   private
 
     def order_address_params
-      params.require(:address).permit(:billing_address, :shipping_address, :city, :phone, :zip)
+      params.require(:address).permit(:street_address, :city, :phone, :zip)
     end
 
     def order_credit_cards_params

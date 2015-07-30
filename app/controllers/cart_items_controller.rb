@@ -1,6 +1,6 @@
 class CartItemsController < ApplicationController
   before_action :initialize_cart
-  load_and_authorize_resource through: :cart
+  load_and_authorize_resource
 
   def index
   end

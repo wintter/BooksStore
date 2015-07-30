@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
     end
 
     def initialize_cart
-      @cart = Cart.where(user: current_user).first_or_create
+      @cart = Cart.find_or_create_by(user: current_user)
     end
 
 end

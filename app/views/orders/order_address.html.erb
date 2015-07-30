@@ -6,8 +6,7 @@
 
           <%= render 'shared/error_order', entity: @address %>
 
-          <%= f.text_field :billing_address, value: get_session_value('order_address', 'billing_address'), placeholder: 'Billing address' %>
-          <%= f.text_field :shipping_address, value: get_session_value('order_address', 'shipping_address'), placeholder: 'Shipping address' %>
+          <%= f.text_field :street_address, value: get_session_value('order_address', 'street_address'), placeholder: 'Street address' %>
           <%= f.text_field :city, value: get_session_value('order_address', 'city'), placeholder: 'City' %>
           <%= f.text_field :phone, value: get_session_value('order_address', 'phone'), placeholder: 'Phone' %>
           <%= f.text_field :zip, value: get_session_value('order_address', 'zip'), placeholder: 'Zip' %>

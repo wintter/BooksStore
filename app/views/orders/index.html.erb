@@ -1,8 +1,8 @@
 <div class="container">
   <div class="col-md-12 font_size_14">
     <br/>
-    <div class="font_opensans font_size_25">All order</div><hr><br/>
     <% unless @orders.nil? %>
+        <div class="font_opensans font_size_25">All order</div><hr><br/>
         <% @orders.each do |item| %>
             <div class="row container_profile">
               <div class="col-md-3">
@@ -10,9 +10,7 @@
                 <hr>
                 Status: <span class="color_slider_top"><%= item.order_state.state %></span><br/>
                 <hr>
-                Billing address: <%= item.address.billing_address %><br/>
-                <hr>
-                Shipping address: <%= item.address.shipping_address %><br/>
+                Street address: <%= item.address.street_address %><br/>
                 <hr>
                 Credit card: <%= item.credit_card.number %>
               </div>

@@ -6,15 +6,13 @@ class Ability
     #
        user ||= User.new # guest user (not logged in)
        if user.admin?
-         can :manage, :all
+         can :manage, :all, user: user
        else
-         can :read, Book
-         can :manage, Rating
-         can :read, Author
-         can :manage, Cart
-         can :manage, Order do |order|
-           order.user == user
-         end
+         can [:index, :show, :add_to_cart, :add_to_wish_list], Book
+         can :create, Rating, user: user.id
+         can :manage, CartItem, cart: user.cart
+         can :manage, WishList, user: user
+         can [:index, :show, :create, :update], Order, user: user
        end
     #
     # The first argument to `can` is the action you are giving the user

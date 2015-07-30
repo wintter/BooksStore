@@ -1,6 +1,8 @@
 class Admin::BooksController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource class: self
+  load_resource
   layout 'admin/layouts/application'
+  include Admin::AdminHelper
 
   def index
   end
@@ -13,8 +15,7 @@ class Admin::BooksController < ApplicationController
 
   def create
     if @book.save
-      flash[:success] = 'Book ' << @book.title << ' has successfully created'
-      redirect_to action: 'index'
+      flash_and_redirect(@book, 'create')
     else
       render 'new'
     end
@@ -22,8 +23,7 @@ class Admin::BooksController < ApplicationController
 
   def update
     if @book.update_attributes(book_params)
-      flash[:success] = 'Book ' << @book.title << ' has successfully updated'
-      redirect_to action: 'index'
+      flash_and_redirect(@book, 'update')
     else
       render 'edit'
     end

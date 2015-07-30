@@ -61,9 +61,9 @@
       <% if params[:controller] == 'books' && params[:action] == 'index' %>
       <%= form_tag({controller: 'books', action: 'index'}, method: 'get', class: 'font_opensans') do %>
           <%= radio_button_tag(:type, '1', true, class: 'width_15 font_weight_600') %>
-          <%= label_tag(:book, 'book', class: 'color_white') %>
+          <%= label_tag(:book, 'by book', class: 'color_white') %>
           <%= radio_button_tag(:type, '2', false, class: 'width_15') %>
-          <%= label_tag(:author, 'author', class: 'color_white') %>
+          <%= label_tag(:author, 'by author', class: 'color_white') %>
           <%= text_field_tag(:search, nil, class: 'search', placeholder: 'Search') %>
           <%= button_tag(type: 'submit', class: 'glyphicon glyphicon-search search_icon') do %>
           <% end %>

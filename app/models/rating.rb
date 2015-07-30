@@ -7,7 +7,7 @@ class Rating < ActiveRecord::Base
   class << self
 
     def number(book, user)
-      @rating = where(book: book, user: user).first
+      @rating = find_by(book: book, user: user)
       @rating ? @rating.rating_number : 0
     end
 

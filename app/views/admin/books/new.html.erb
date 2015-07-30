@@ -21,7 +21,7 @@
         <%= f.label 'Change book author' %>
         <%= select_tag('book[author_id]', options_from_collection_for_select(@authors, :id, :firstname)) %>
 
-        <%= f.submit 'Create a books', class: 'btn btn-large btn-register' %>
+        <%= f.submit 'Create a book', class: 'btn btn-large btn-register' %>
     <% end %>
 
   </div>

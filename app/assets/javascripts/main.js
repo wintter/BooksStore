@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $('[data-toggle="popover"]').popover();
 });
+$(".rating").rating();
 
 $(document).on('click', '.category_id a', function() {
     var cat_id = $(this).data('id');

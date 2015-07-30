@@ -1,6 +1,8 @@
 class Admin::OrdersController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource class: self
+  load_resource
   layout 'admin/layouts/application'
+  include Admin::AdminHelper
 
   def index
     @states = OrderState.all
@@ -8,8 +10,7 @@ class Admin::OrdersController < ApplicationController
 
   def update
     @order.update_attributes(order_params)
-    flash[:success] = 'Order has successfully updated'
-    redirect_to action: 'index'
+    flash_and_redirect(@order, nil)
   end
 
   private

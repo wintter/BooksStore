@@ -1,6 +1,8 @@
 class Admin::AuthorsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource class: self
+  load_resource
   layout 'admin/layouts/application'
+  include Admin::AdminHelper
 
   def index
   end
@@ -13,8 +15,7 @@ class Admin::AuthorsController < ApplicationController
 
   def create
     if @author.save
-      flash[:success] = 'Author ' << @author.firstname << ' has successfully created'
-      redirect_to action: 'index'
+      flash_and_redirect(@author, 'create')
     else
       render 'new'
     end
@@ -22,8 +23,7 @@ class Admin::AuthorsController < ApplicationController
 
   def update
     if @author.update_attributes(author_params)
-      flash[:success] = 'Author ' << @author.firstname << ' has successfully updated'
-      redirect_to action: 'index'
+      flash_and_redirect(@author, 'update')
     else
       render 'edit'
     end

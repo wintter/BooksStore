@@ -1,6 +1,8 @@
 class Admin::CategoriesController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource class: self
+  load_resource
   layout 'admin/layouts/application'
+  include Admin::AdminHelper
 
   def index
   end
@@ -13,8 +15,7 @@ class Admin::CategoriesController < ApplicationController
 
   def create
     if @category.save
-      flash[:success] = 'Category ' << @category.title << ' has successfully created'
-      redirect_to action: 'index'
+      flash_and_redirect(@catogory, 'create')
     else
       render 'new'
     end
@@ -22,15 +23,14 @@ class Admin::CategoriesController < ApplicationController
 
   def update
     if @category.update_attributes(category_params)
-      flash[:success] = 'Category ' << @category.title << ' has successfully updated'
-      redirect_to action: 'index'
+      flash_and_redirect(@catogory, 'update')
     else
       render 'edit'
     end
   end
 
   def destroy
-    Category.find(params[:id]).destroy
+    @category.destroy
     redirect_to action: 'index'
   end
 

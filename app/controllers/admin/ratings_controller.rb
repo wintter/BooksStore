@@ -1,15 +1,16 @@
 class Admin::RatingsController < ApplicationController
   before_filter :find_approved_ratings, only: :index
-  load_and_authorize_resource
+  authorize_resource class: self
+  load_resource
   layout 'admin/layouts/application'
+  include Admin::AdminHelper
 
   def index
   end
 
   def update
     @rating.update_attributes(approve: true)
-    flash[:success] = 'Review has successfully approved'
-    redirect_to action: 'index'
+    flash_and_redirect(@rating, nil)
   end
 
   def destroy
