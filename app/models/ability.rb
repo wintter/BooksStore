@@ -9,7 +9,7 @@ class Ability
          can :manage, :all
        else
          can [:index, :show, :add_to_cart, :add_to_wish_list], Book
-         can :create, Rating, user: user.id
+         can :create, Rating, user: user
          can :manage, CartItem, cart: user.cart
          can :manage, WishList, user: user
          can [:index, :show, :create, :update], Order, user: user
