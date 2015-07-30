@@ -31,6 +31,7 @@ gem 'cancancan'
 gem 'devise'
 gem 'carrierwave'
 gem 'wicked'
+gem 'carrierwave-dropbox'
 
 group :development do
   gem 'sqlite3'
