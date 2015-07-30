@@ -6,7 +6,7 @@ class Ability
     #
        user ||= User.new # guest user (not logged in)
        if user.admin?
-         can :manage, :all, user: user
+         can :manage, :all
        else
          can [:index, :show, :add_to_cart, :add_to_wish_list], Book
          can :create, Rating, user: user.id
