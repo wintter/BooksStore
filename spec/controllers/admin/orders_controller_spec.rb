@@ -16,7 +16,7 @@ RSpec.describe Admin::OrdersController, type: :controller do
 
     context 'cancan doesnt allow :index' do
       before do
-        ability.cannot :read, Order
+        ability.cannot :index, Admin::OrdersController
         get :index
       end
       it { expect(response).to redirect_to(root_path) }
@@ -30,22 +30,20 @@ RSpec.describe Admin::OrdersController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    #let(:order) { FactoryGirl.create(:order) }
-     #it { p order }
-=begin
-      before do
-        patch :update, id: order.id, order: { order_state_id: 1 }
-      end
-
-      it 'and success flash' do
-        expect(flash[:success]).to be_present
-      end
-
-      it 'to :index' do
-        expect(response).to redirect_to(:admin_categories)
-      end
-=end
-
+    let(:order_state) { FactoryGirl.create(:order_state) }
+    let(:order) { FactoryGirl.create(:order) }
+    before do
+      patch :update, id: order.id, order: { order_state_id: order_state }
     end
+
+    it 'redirect to index' do
+      expect(response).to redirect_to(action: :index)
+    end
+
+    it 'success flash' do
+      expect(flash[:success]).not_to be_nil
+    end
+
+  end
 
 end

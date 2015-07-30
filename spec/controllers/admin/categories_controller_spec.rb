@@ -16,7 +16,7 @@ RSpec.describe Admin::CategoriesController, type: :controller do
 
     context 'cancan doesnt allow :index' do
       before do
-        ability.cannot :read, Category
+        ability.cannot :index, Admin::CategoriesController
         get :index
       end
       it { expect(response).to redirect_to(root_path) }
@@ -26,9 +26,9 @@ RSpec.describe Admin::CategoriesController, type: :controller do
 
   describe 'GET #new' do
 
-    context 'cancan doesnt allow :index' do
+    context 'cancan doesnt allow :new' do
       before do
-        ability.cannot :create, Category
+        ability.cannot :new, Admin::CategoriesController
         get :new
       end
       it { expect(response).to redirect_to(root_path) }
@@ -38,10 +38,10 @@ RSpec.describe Admin::CategoriesController, type: :controller do
 
   describe 'GET #edit' do
 
-    context 'cancan doesnt allow :index' do
+    context 'cancan doesnt allow :edit' do
       let(:category) { FactoryGirl.create(:category) }
       before do
-        ability.cannot :update, Category
+        ability.cannot :edit, Admin::CategoriesController
         get :edit, id: category.id
       end
       it { expect(response).to redirect_to(root_path) }
@@ -100,7 +100,7 @@ RSpec.describe Admin::CategoriesController, type: :controller do
 
     context 'cancan doesnt allow :create' do
       before do
-        ability.cannot :create, Category
+        ability.cannot :create, Admin::CategoriesController
         post :create, category: category_params
       end
       it { expect(response).to redirect_to(root_path) }
@@ -125,9 +125,9 @@ RSpec.describe Admin::CategoriesController, type: :controller do
       let(:templates) { :edit }
     end
 
-    context 'cancan doesnt allow :create' do
+    context 'cancan doesnt allow :update' do
       before do
-        ability.cannot :update, Category
+        ability.cannot :update, Admin::CategoriesController
         patch :update, category_params.merge(id: category.id)
       end
       it { expect(response).to redirect_to(root_path) }
@@ -146,9 +146,9 @@ RSpec.describe Admin::CategoriesController, type: :controller do
       expect(response).to redirect_to(:admin_categories)
     end
 
-    context 'cancan doesnt allow :create' do
+    context 'cancan doesnt allow :destroy' do
       before do
-        ability.cannot :destroy, Category
+        ability.cannot :destroy, Admin::CategoriesController
       end
       it { expect(response).to redirect_to(:admin_categories) }
     end

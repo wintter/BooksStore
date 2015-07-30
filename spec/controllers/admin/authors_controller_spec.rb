@@ -13,10 +13,9 @@ RSpec.describe Admin::AuthorsController, type: :controller do
   end
 
   describe 'GET #index' do
-
     context 'cancan doesnt allow :index' do
       before do
-        ability.cannot :read, Author
+        ability.cannot :index, Admin::AuthorsController
         get :index
       end
       it { expect(response).to redirect_to(root_path) }
@@ -26,9 +25,9 @@ RSpec.describe Admin::AuthorsController, type: :controller do
 
   describe 'GET #new' do
 
-    context 'cancan doesnt allow :index' do
+    context 'cancan doesnt allow :new' do
       before do
-        ability.cannot :create, Author
+        ability.cannot :new, Admin::AuthorsController
         get :new
       end
       it { expect(response).to redirect_to(root_path) }
@@ -41,7 +40,7 @@ RSpec.describe Admin::AuthorsController, type: :controller do
     context 'cancan doesnt allow :index' do
       let(:author) { FactoryGirl.create(:author) }
       before do
-        ability.cannot :update, Author
+        ability.cannot :edit, Admin::AuthorsController
         get :edit, id: author.id
       end
       it { expect(response).to redirect_to(root_path) }
@@ -100,7 +99,7 @@ RSpec.describe Admin::AuthorsController, type: :controller do
 
     context 'cancan doesnt allow :create' do
       before do
-        ability.cannot :create, Author
+        ability.cannot :create, Admin::AuthorsController
         post :create, author: author_params
       end
       it { expect(response).to redirect_to(root_path) }
@@ -127,7 +126,7 @@ RSpec.describe Admin::AuthorsController, type: :controller do
 
     context 'cancan doesnt allow :create' do
       before do
-        ability.cannot :update, Author
+        ability.cannot :update, Admin::AuthorsController
         patch :update, author_params.merge(id: author.id)
       end
       it { expect(response).to redirect_to(root_path) }

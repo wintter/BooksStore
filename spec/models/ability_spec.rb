@@ -7,16 +7,30 @@ RSpec.describe Ability, type: :model do
     let(:user) { FactoryGirl.create(:user) }
     subject { Ability.new(user) }
 
-    it 'can #index Author' do
-      expect(subject).to be_able_to(:read, Author)
+    context 'Book ability' do
+      it { expect(subject).to be_able_to(:index, Book) }
+      it { expect(subject).to be_able_to(:show, Book) }
+      it { expect(subject).to be_able_to(:add_to_wish_list, Book) }
+      it { expect(subject).to be_able_to(:add_to_cart, Book) }
     end
 
-    it 'can #index Rating' do
-      expect(subject).to be_able_to(:create, Rating.new)
+    context 'Rating ability' do
+      it { expect(subject).to be_able_to(:create, Rating) }
     end
 
-    it 'can #index Book' do
-      expect(subject).to be_able_to(:read, Book)
+    context 'CartItem ability' do
+      it { expect(subject).to be_able_to(:manage, CartItem) }
+    end
+
+    context 'WishList ability' do
+      it { expect(subject).to be_able_to(:manage, WishList) }
+    end
+
+    context 'Order ability' do
+      it { expect(subject).to be_able_to(:index, Order) }
+      it { expect(subject).to be_able_to(:show, Order) }
+      it { expect(subject).to be_able_to(:create, Order) }
+      it { expect(subject).to be_able_to(:update, Order) }
     end
 
   end

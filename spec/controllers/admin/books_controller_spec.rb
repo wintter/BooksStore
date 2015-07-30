@@ -44,7 +44,7 @@ RSpec.describe Admin::BooksController, type: :controller do
 
     context 'cancan doesnt allow :index' do
       before do
-        ability.cannot :read, Book
+        ability.cannot :index, Admin::BooksController
         get :index
       end
       it { expect(response).to redirect_to(root_path) }
@@ -54,9 +54,9 @@ RSpec.describe Admin::BooksController, type: :controller do
 
 	describe 'GET #new' do
 
-    context 'cancan doesnt allow :index' do
+    context 'cancan doesnt allow :new' do
       before do
-        ability.cannot :create, Book
+        ability.cannot :new, Admin::BooksController
         get :new
       end
       it { expect(response).to redirect_to(root_path) }
@@ -72,10 +72,10 @@ RSpec.describe Admin::BooksController, type: :controller do
 			allow(Book).to receive(:find).and_return book
 		end
 
-    context 'cancan doesnt allow :index' do
+    context 'cancan doesnt allow :edit' do
       let(:book) { FactoryGirl.create(:book) }
       before do
-        ability.cannot :update, Book
+        ability.cannot :edit, Admin::BooksController
         get :edit, id: book.id
       end
       it { expect(response).to redirect_to(root_path) }
@@ -106,7 +106,7 @@ RSpec.describe Admin::BooksController, type: :controller do
 
     context 'cancan doesnt allow :create' do
       before do
-        ability.cannot :create, Book
+        ability.cannot :create, Admin::BooksController
         post :create, book: book_params
       end
       it { expect(response).to redirect_to(root_path) }
@@ -131,9 +131,9 @@ RSpec.describe Admin::BooksController, type: :controller do
 			let(:templates) { :edit }
     end
 
-    context 'cancan doesnt allow :create' do
+    context 'cancan doesnt allow :update' do
       before do
-        ability.cannot :update, Book
+        ability.cannot :update, Admin::BooksController
         patch :update, book_params.merge(id: book.id)
       end
       it { expect(response).to redirect_to(root_path) }
@@ -148,9 +148,9 @@ RSpec.describe Admin::BooksController, type: :controller do
       delete :destroy, id: book.id
     end
 
-    context 'cancan doesnt allow :create' do
+    context 'cancan doesnt allow :destroy' do
       before do
-        ability.cannot :destroy, Book
+        ability.cannot :destroy, Admin::BooksController
       end
       it { expect(response).to redirect_to(:admin_books) }
     end

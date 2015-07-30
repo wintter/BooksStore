@@ -4,7 +4,6 @@ RSpec.describe WishListsController, type: :controller do
 
   let(:user) { FactoryGirl.create(:user) }
   let(:ability) { Ability.new(user) }
-  let(:book) { FactoryGirl.create(:book) }
 
   before do
     allow(controller).to receive(:current_ability).and_return(ability)
@@ -12,7 +11,8 @@ RSpec.describe WishListsController, type: :controller do
     sign_in user
   end
 
-  let(:wish_list) { FactoryGirl.create(:wish_list) }
+  let(:book) { FactoryGirl.create(:book) }
+  let(:wish_list) { FactoryGirl.create(:wish_list, user: user) }
 
   describe 'GET #index' do
 
@@ -26,7 +26,6 @@ RSpec.describe WishListsController, type: :controller do
   describe 'DELETE #destroy' do
 
     it 'redirect to index' do
-      user.wish_lists.push wish_list
       delete :destroy, id: wish_list
       expect(response).to redirect_to(wish_lists_path)
     end

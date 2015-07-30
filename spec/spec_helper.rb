@@ -4,7 +4,6 @@ require 'cancan/matchers'
 RSpec.configure do |config|
   config.include Capybara::DSL
 
-
   config.before(:suite) do
     # This says that before the entire test suite runs, clear the test database out completely.
     # This gets rid of any garbage left over from interrupted or poorly-written tests - a common source of surprising test behavior.

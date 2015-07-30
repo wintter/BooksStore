@@ -12,8 +12,7 @@ RSpec.describe Rating, type: :model do
     let(:user) { FactoryGirl.create(:user) }
 
     it '#where with book and user' do
-      allow(Rating).to receive_message_chain(:where, :first)
-      expect(Rating).to receive(:where).with(book: book, user: user)
+      expect(Rating).to receive(:find_by).with(book: book, user: user)
       Rating.number(book, user)
     end
 

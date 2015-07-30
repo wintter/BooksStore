@@ -21,7 +21,7 @@ RSpec.describe Admin::RatingsController, type: :controller do
 
     context 'cancan doesnt allow :index' do
       before do
-        ability.cannot :read, Rating
+        ability.cannot :index, Admin::RatingsController
         get :index
       end
       it { expect(response).to redirect_to(root_path) }
@@ -37,10 +37,10 @@ RSpec.describe Admin::RatingsController, type: :controller do
 		end
 
 		it 'should set approve to true' do
-			expect(Rating.find(rating.id).approve).to eq true
+			expect(rating.reload.approve).to eq true
 		end
 
-		it 'and success flash' do
+		it 'success flash' do
 			expect(flash[:success]).to be_present
 		end
 
@@ -52,10 +52,6 @@ RSpec.describe Admin::RatingsController, type: :controller do
 
 	describe 'DELETE #destroy' do
 		let(:rating) { FactoryGirl.create(:rating) }
-
-		before do
-			allow(Rating).to receive(:find).and_return rating
-		end
 
 		it 'redirect to :index' do
 			delete :destroy, id: rating.id

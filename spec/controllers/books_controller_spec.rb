@@ -3,13 +3,14 @@ require 'rails_helper'
 RSpec.describe BooksController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
   let(:ability) { Ability.new(user) }
-  let(:book) { FactoryGirl.create(:book) }
 
   before do
     allow(controller).to receive(:current_ability).and_return(ability)
     ability.can :manage, :all
     sign_in user
   end
+
+  let(:book) { FactoryGirl.create(:book) }
 
   shared_examples 'success flash and redirect' do
     before { req }
