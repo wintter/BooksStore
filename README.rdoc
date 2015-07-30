@@ -1,5 +1,6 @@
 == README
- {<img src="https://codeclimate.com/repos/55b682c5e30ba038ce009536/badges/8e0aac5fb1a8301a3682/gpa.svg" />}[https://codeclimate.com/repos/55b682c5e30ba038ce009536/feed]
+
+{<img src="https://codeclimate.com/repos/55b682c5e30ba038ce009536/badges/8e0aac5fb1a8301a3682/gpa.svg" />}[https://codeclimate.com/repos/55b682c5e30ba038ce009536/feed]
  
 This README would normally document whatever steps are necessary to get the
 application up and running.
