@@ -4,7 +4,8 @@ class Order < ActiveRecord::Base
   belongs_to :user
   belongs_to :credit_card
   belongs_to :delivery
-  belongs_to :address
+  belongs_to :billing_address, class_name: :Address
+  belongs_to :shipping_address, class_name: :Address
   belongs_to :coupon
   has_many :order_items
 
