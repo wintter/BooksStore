@@ -14,7 +14,8 @@ module OrdersHelper
   end
 
   def link(link_class, step)
-    return link_to_if(link_class == 'finished', title(step), wizard_path(step))
+    #return link_to_if(link_class == 'finished', title(step), wizard_path(step))
+    return link_to_if(true, title(step), wizard_path(step))
     step
   end
 
