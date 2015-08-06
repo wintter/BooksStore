@@ -14,7 +14,8 @@ class OrdersController < ApplicationController
   def show
     case step
       when :order_address
-        @address ||= @cart.address || Address.new
+        @billing_address ||= @cart.billing_address || Address.new
+        @shipping_address ||= @cart.shipping_address || Address.new
       when :order_delivery
         @delivery = Delivery.all
       when :order_payment
@@ -34,11 +35,12 @@ class OrdersController < ApplicationController
   def update
       case step
         when :order_address
-          @check = check_valid_request(Address, order_address_params)
+          @check = create_addresses(order_address_params(:billing_address),
+                                    order_address_params(:shipping_address))
         when :order_delivery
-          @check = change_delivery(order_delivery_params)
+          @check = create_delivery(order_delivery_params)
         when :order_payment
-          @check = check_valid_request(CreditCard, order_credit_cards_params)
+          @check = create_credit_card(order_credit_cards_params)
         else
         create
       end
@@ -62,8 +64,8 @@ class OrdersController < ApplicationController
 
   private
 
-    def order_address_params
-      params.require(:address).permit(:street_address, :city, :phone, :zip)
+    def order_address_params(type)
+      params.require(type).permit(:street_address, :city, :phone, :zip)
     end
 
     def order_credit_cards_params
