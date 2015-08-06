@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   #routes app
   resources :books, only: [:index, :show]
-  resources :cart_items, only: [:index, :update, :destroy]
+  resources :order_items, only: [:index, :update, :destroy]
   resources :orders, only: [:index, :show, :create, :update, ]
   resources :wish_lists, only: [:index, :destroy]
   resources :ratings, only: [:create]
@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   get '/add_to_cart', to: 'books#add_to_cart'
   get '/add_to_wish_list', to: 'books#add_to_wish_list'
+  get '/coupon', to: 'orders#coupon'
   get '/manager', to: redirect('admin/books')
 
 
