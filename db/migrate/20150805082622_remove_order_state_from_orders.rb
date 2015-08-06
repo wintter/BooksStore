@@ -1,5 +1,5 @@
 class RemoveOrderStateFromOrders < ActiveRecord::Migration
   def change
-    remove_reference(:orders, :order_state, index: true, foreign_key: true)
+    remove_reference(:orders, :order_state, index: true)
   end
 end
