@@ -22,18 +22,12 @@ RSpec.describe Admin::OrdersController, type: :controller do
       it { expect(response).to redirect_to(root_path) }
     end
 
-    it 'use OrderState' do
-      expect(OrderState).to receive(:all)
-      get :index
-    end
-
   end
 
   describe 'PATCH #update' do
-    let(:order_state) { FactoryGirl.create(:order_state) }
-    let(:order) { FactoryGirl.create(:order) }
+    let(:order) { FactoryGirl.create(:order, state: 'in_queue') }
     before do
-      patch :update, id: order.id, order: { order_state_id: order_state }
+      patch :update, id: order.id, order: order
     end
 
     it 'redirect to index' do
@@ -42,6 +36,22 @@ RSpec.describe Admin::OrdersController, type: :controller do
 
     it 'success flash' do
       expect(flash[:success]).not_to be_nil
+    end
+
+    it 'state to in_delivery' do
+      expect(order.reload.state).to eq 'in_delivery'
+    end
+
+    it 'state to delivered' do
+      allow(OrderMailer).to receive_message_chain(:order_delivered, :deliver_now)
+      order.update(state: 'in_delivery')
+      patch :update, id: order.id, order: order
+      expect(order.reload.state).to eq 'delivered'
+    end
+
+    it 'cancel if params[:cancel]' do
+      patch :update, id: order.id, order: order, cancel: true
+      expect(order.reload.state).to eq 'canceled'
     end
 
   end

@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Book, type: :model do
 
   let(:subject) { FactoryGirl.create(:book) }
+  let(:user) { FactoryGirl.create(:user) }
 
   it { expect(subject).to validate_presence_of(:title) }
   it { expect(subject).to validate_presence_of(:description) }
@@ -32,17 +33,24 @@ RSpec.describe Book, type: :model do
 
   end
 
-  context '.save_image' do
+  context '#number' do
+    let(:rating) { FactoryGirl.create(:rating, rating_number: 10, user: user, approve: true) }
 
-    before do
-      @file = fixture_file_upload('files/test.png', 'image/png')
+    it 'rating 0 if not exist' do
+       expect(subject.number(user)).to eq 0
     end
 
-    xit 'read file' do
-      expect(MiniMagick::Image).to receive(:read)
-      Book.save_image @file, 1
+    it 'rating if exist' do
+      rating.update(book: subject)
+      expect(subject.number(user)).to eq 10
     end
 
+  end
+
+  context '#reviews' do
+    let(:rating) { FactoryGirl.create(:rating, approve: true, book: subject) }
+
+    it { expect(subject.reviews).to match_array(rating) }
   end
 
 end

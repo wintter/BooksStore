@@ -11,19 +11,29 @@ RSpec.describe OrdersController, type: :controller do
     sign_in user
   end
 
+  let!(:cart) { FactoryGirl.create(:order, user: user) }
+  let(:book) { FactoryGirl.create(:book) }
+  let(:order_item) { FactoryGirl.create(:order_item, order: cart, book: book, quantity: 1) }
+
   describe 'GET #index' do
 
     before { get :index }
 
     it 'create @orders' do
-      expect(assigns(@orders)).not_to be_nil
+      expect(assigns(:orders)).not_to be_nil
     end
+
+    it '#not_in_progress' do
+      expect(assigns(:orders)).to receive(:valid_orders)
+      get :index
+    end
+
   end
 
   describe 'GET #show' do
 
     context 'first_step' do
-      let!(:first_step) { get :show, id: :order_address }
+      before { get :show, id: :order_address }
 
       it 'render order_address template' do
         expect(response).to render_template('order_address')
@@ -32,18 +42,24 @@ RSpec.describe OrdersController, type: :controller do
       it 'create @address' do
         expect(assigns(:address)).to be_instance_of Address
       end
+
     end
 
     context 'second_step' do
-      let!(:second_step) { get :show, id: :order_delivery }
+      before { get :show, id: :order_delivery }
 
       it 'render order_delivery template' do
         expect(response).to render_template('order_delivery')
       end
+
+      it 'create @delivery' do
+        expect(assigns(:delivery)).to eq Delivery.all
+      end
+
     end
 
     context 'third_step' do
-      let!(:third_step) { get :show, id: :order_payment }
+     before { get :show, id: :order_payment }
 
       it 'render order_payment template' do
         expect(response).to render_template('order_payment')
@@ -55,26 +71,39 @@ RSpec.describe OrdersController, type: :controller do
     end
 
     context 'fourth_step' do
-      #let!(:order_confirm) { get :show, id: :order_confirm }
 
-      before do
-        FactoryGirl.create(:cart_item, cart: user.cart)
+      it 'redirect to address if address does not exist' do
+        get :show, id: :order_confirm
+        expect(response).to redirect_to(action: :show, id: :order_address)
       end
 
-      it 'render order_confirm template' do
-        #expect(response).to render_template('order_confirm')
+      it 'redirect_to delivery if delivery does not exist' do
+        cart.update(address: FactoryGirl.create(:address))
+        get :show, id: :order_confirm
+        expect(response).to redirect_to(action: :show, id: :order_delivery)
+      end
+
+      it 'redirect_to credit_card if credit_card does not exist' do
+        cart.update(address: FactoryGirl.create(:address), delivery: FactoryGirl.create(:delivery))
+        get :show, id: :order_confirm
+        expect(response).to redirect_to(action: :show, id: :order_payment)
+      end
+
+      it 'render confirm template' do
+        cart.update(address: FactoryGirl.create(:address), delivery: FactoryGirl.create(:delivery),
+                    credit_card: FactoryGirl.create(:credit_card))
+        get :show, id: :order_confirm
+        expect(response).to render_template('order_confirm')
       end
 
     end
-
 
   end
 
   describe 'POST #create' do
     before do
-      FactoryGirl.create(:cart, user: user)
-      FactoryGirl.create(:order_state)
-      FactoryGirl.create(:cart_item, cart: user.cart, book: FactoryGirl.create(:book))
+      cart.update(address: FactoryGirl.create(:address), delivery: FactoryGirl.create(:delivery),
+                  credit_card: FactoryGirl.create(:credit_card))
       post :create
     end
 
@@ -85,6 +114,15 @@ RSpec.describe OrdersController, type: :controller do
     it 'success flash' do
       expect(flash[:success]).not_to be_nil
     end
+
+    it 'remove \'in progress\'' do
+      expect(cart.reload.state).not_to eq 'in_progress'
+    end
+
+    it 'changes in progress to second state' do
+      expect(cart.reload.state).to eq 'in_queue'
+    end
+
   end
 
   describe 'PATCH #update' do
@@ -105,9 +143,6 @@ RSpec.describe OrdersController, type: :controller do
           expect(response).to redirect_to(action: 'show', id: :order_delivery)
         end
 
-        it 'set address in session' do
-          expect(session['order_address']).not_to be_nil
-        end
       end
 
       describe 'invalid form' do
@@ -127,25 +162,21 @@ RSpec.describe OrdersController, type: :controller do
     context 'second step' do
 
       describe 'valid form' do
-        before { patch :update, id: :order_delivery, delivery: 5 }
-
-        it 'set delivery to session' do
-          expect(session['order_delivery']).not_to be_nil
-        end
+        before { patch :update, id: :order_delivery, delivery: FactoryGirl.create(:delivery) }
 
         it 'call #order_delivery_params' do
-          expect(controller).to receive(:order_delivery_params)
-          patch :update, id: :order_delivery, delivery: 5
+          expect(controller).to receive(:change_delivery)
+          patch :update, id: :order_delivery, delivery: FactoryGirl.create(:delivery)
         end
 
         it 'redirect to next step' do
-          expect(response).to redirect_to(action: 'show', id: :order_payment)
+          expect(response).to redirect_to(action: :show, id: :order_payment)
         end
 
       end
 
       describe 'invalid form' do
-        before { patch :update, id: :order_delivery, delivery: 1000 }
+        before { patch :update, id: :order_delivery, delivery: nil }
 
         it 'not redirect if errors' do
           expect(response).to render_template(:order_delivery)
@@ -168,12 +199,9 @@ RSpec.describe OrdersController, type: :controller do
         before { patch :update, id: :order_payment, credit_card: credit_card }
 
         it 'redirect to next step' do
-          expect(response).to redirect_to(action: 'show', id: :order_confirm)
+          expect(response).to redirect_to(action: :show, id: :order_confirm)
         end
 
-        it 'set address in session' do
-          expect(session['order_creditcard']).not_to be_nil
-        end
       end
 
       describe 'invalid form' do
@@ -192,15 +220,74 @@ RSpec.describe OrdersController, type: :controller do
 
     context 'firth step' do
       before do
-        FactoryGirl.create(:cart, user: user)
-        FactoryGirl.create(:order_state)
-        FactoryGirl.create(:cart_item, cart: user.cart, book: FactoryGirl.create(:book))
+        cart.update(address: FactoryGirl.create(:address), delivery: FactoryGirl.create(:delivery),
+                    credit_card: FactoryGirl.create(:credit_card))
       end
-      before { patch :update, id: :order_confirm }
+      after { patch :update, id: :order_confirm }
 
-      xit '#create' do
+      it '#create' do
         expect(controller).to receive(:create)
-        patch :update, id: :order_confirm
+      end
+
+    end
+
+  end
+
+  describe 'GET #coupon' do
+    let!(:coupon) { FactoryGirl.create(:coupon, number: 1111, discount: 100) }
+
+    before do
+      request.env['HTTP_REFERER'] = root_path
+      allow(controller).to receive(:calculate_price)
+      get :coupon, coupon: 1111
+    end
+
+    it '.calculate_price' do
+      expect(controller).to receive(:calculate_price)
+      get :coupon, coupon: 1111
+    end
+
+    context 'coupon exist' do
+
+      it 'find coupon' do
+        expect(Coupon).to receive(:find_by).with(number: '1111')
+        get :coupon, coupon: 1111
+      end
+
+      it 'update cart' do
+        expect(cart.reload.coupon).to eq coupon
+      end
+
+      it 'success flash' do
+        expect(flash[:success]).not_to be_nil
+      end
+
+      it 'redirect_to http_referer' do
+        expect(response).to redirect_to(:root)
+      end
+
+    end
+
+    context 'coupon does not exist' do
+      let!(:coupon) { FactoryGirl.create(:coupon, number: 1112, discount: 100) }
+
+      it 'error flash' do
+        expect(flash[:error]).not_to be_nil
+      end
+
+      it 'redirect_to http_referer' do
+        expect(response).to redirect_to(:root)
+      end
+    end
+
+    context 'user already use coupon' do
+      before do
+        cart.update(coupon: coupon)
+        get :coupon, coupon: 1111
+      end
+
+      it 'flash error' do
+        expect(flash[:error]).not_to be_nil
       end
 
     end

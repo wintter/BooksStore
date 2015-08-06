@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe BooksController, type: :controller do
+
   let(:user) { FactoryGirl.create(:user) }
   let(:ability) { Ability.new(user) }
 
@@ -9,7 +10,7 @@ RSpec.describe BooksController, type: :controller do
     ability.can :manage, :all
     sign_in user
   end
-
+  
   let(:book) { FactoryGirl.create(:book) }
 
   shared_examples 'success flash and redirect' do
@@ -46,14 +47,23 @@ RSpec.describe BooksController, type: :controller do
   end
 
   describe 'GET #show' do
+    before { get :show, id: book.id }
+
+    it 'load @book' do
+      expect(assigns(:book)).not_to be_nil
+    end
 
     it '#get_rate' do
-      expect(Rating).to receive(:number)
-      get :show, id: book.id
+      expect(assigns(:rating)).not_to be_nil
     end
 
     it '#get_review' do
-      expect(Rating).to receive(:user_reviews)
+      expect(assigns(:book)).to receive(:reviews)
+      get :show, id: book.id
+    end
+
+    it '#reviews' do
+      expect(assigns(:book)).to receive(:reviews)
       get :show, id: book.id
     end
 
@@ -66,11 +76,16 @@ RSpec.describe BooksController, type: :controller do
     describe 'GET #add_to_cart' do
 
       it 'add book to cart' do
-        expect { get :add_to_cart, id: book }.to change { CartItem.count }.from(0).to(1)
+        expect { get :add_to_cart, id: book }.to change { OrderItem.count }.from(0).to(1)
       end
 
       it_behaves_like 'success flash and redirect' do
         let(:req) { get :add_to_cart, id: book }
+      end
+
+      it '#calculate_price' do
+        expect(controller).to receive(:calculate_price)
+        get :add_to_cart, id: book
       end
 
     end

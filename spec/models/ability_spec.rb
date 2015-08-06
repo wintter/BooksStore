@@ -15,22 +15,18 @@ RSpec.describe Ability, type: :model do
     end
 
     context 'Rating ability' do
-      it { expect(subject).to be_able_to(:create, Rating) }
-    end
-
-    context 'CartItem ability' do
-      it { expect(subject).to be_able_to(:manage, CartItem) }
+      it { expect(subject).to be_able_to(:create, Rating.new(user: user)) }
     end
 
     context 'WishList ability' do
-      it { expect(subject).to be_able_to(:manage, WishList) }
+      it { expect(subject).to be_able_to(:manage, WishList.new(user: user)) }
     end
 
     context 'Order ability' do
-      it { expect(subject).to be_able_to(:index, Order) }
-      it { expect(subject).to be_able_to(:show, Order) }
-      it { expect(subject).to be_able_to(:create, Order) }
-      it { expect(subject).to be_able_to(:update, Order) }
+      it { expect(subject).to be_able_to(:index, Order.new(user: user)) }
+      it { expect(subject).to be_able_to(:show, Order.new(user: user)) }
+      it { expect(subject).to be_able_to(:create, Order.new(user: user)) }
+      it { expect(subject).to be_able_to(:update, Order.new(user: user)) }
     end
 
   end

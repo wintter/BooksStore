@@ -1,8 +1,10 @@
 require 'capybara/rspec'
 require 'cancan/matchers'
+require 'user_step_helper'
 
 RSpec.configure do |config|
   config.include Capybara::DSL
+  config.include UserStepHelper
 
   config.before(:suite) do
     # This says that before the entire test suite runs, clear the test database out completely.

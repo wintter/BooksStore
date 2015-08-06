@@ -12,13 +12,13 @@ RSpec.describe WishListsController, type: :controller do
   end
 
   let(:book) { FactoryGirl.create(:book) }
-  let(:wish_list) { FactoryGirl.create(:wish_list, user: user) }
+  let!(:wish_list) { FactoryGirl.create(:wish_list, user: user) }
 
   describe 'GET #index' do
 
     it 'generate @wish_lists' do
-      expect(assigns(@wish_lists)).not_to be_nil
       get :index
+      expect(assigns(:wish_lists)).not_to be_nil
     end
 
   end
