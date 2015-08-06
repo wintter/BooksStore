@@ -8,16 +8,16 @@
 
           <%= render 'shared/error_order', entity: @credit_card %>
 
-          <%= f.text_field :number, value: get_session_value('order_creditcard', 'number'), placeholder: 'Number' %>
-          <%= f.text_field :CVV, value: get_session_value('order_creditcard', 'CVV'), placeholder: 'CVV' %>
-          <%= f.text_field :first_name, value: get_session_value('order_creditcard', 'first_name'), placeholder: 'First name' %>
-          <%= f.text_field :last_name, value: get_session_value('order_creditcard', 'last_name'), placeholder: 'Last name' %>
+          <%= f.text_field :number, placeholder: 'Number' %>
+          <%= f.text_field :CVV, placeholder: 'CVV' %>
+          <%= f.text_field :first_name, placeholder: 'First name' %>
+          <%= f.text_field :last_name, placeholder: 'Last name' %>
 
           <%= label_tag 'Expiration month' %>
-          <%= f.select :expiration_month, 1..12, selected: get_session_value('order_creditcard', 'expiration_month') %>
+          <%= f.select :expiration_month, options_for_select(1..12, @credit_card.expiration_month) %>
 
           <%= label_tag 'Expiration year' %>
-          <%= f.select :expiration_year, Date.today.year - 5.. Date.today.year + 5, selected: get_session_value('order_creditcard', 'expiration_year') %>
+          <%= f.select :expiration_year, options_for_select(Date.today.year - 5.. Date.today.year + 5, @credit_card.expiration_year) %>
 
           <%= f.submit 'Save and continue', class: 'btn btn-large btn-register' %>
       <% end %>

@@ -1,15 +1,15 @@
 <div class="col-md-12">
   <div class="row">
     <div class="col-md-4 col-md-offset-4">
-      <%= form_for @address, url: wizard_path, method: :put, html: {class: 'font_opensans form_register'} do |f| %>
+      <%= form_for @address, url: wizard_path, method: :patch, html: {class: 'font_opensans form_register'} do |f| %>
           <div class="font_opensans text_align_center font_weight_600">Fill address information</div><br/>
 
           <%= render 'shared/error_order', entity: @address %>
 
-          <%= f.text_field :street_address, value: get_session_value('order_address', 'street_address'), placeholder: 'Street address' %>
-          <%= f.text_field :city, value: get_session_value('order_address', 'city'), placeholder: 'City' %>
-          <%= f.text_field :phone, value: get_session_value('order_address', 'phone'), placeholder: 'Phone' %>
-          <%= f.text_field :zip, value: get_session_value('order_address', 'zip'), placeholder: 'Zip' %>
+          <%= f.text_field :street_address, placeholder: 'Street address' %>
+          <%= f.text_field :city, placeholder: 'City' %>
+          <%= f.text_field :phone, placeholder: 'Phone' %>
+          <%= f.text_field :zip, placeholder: 'Zip' %>
 
           <%= f.submit 'Save and continue', class: 'btn btn-large btn-register' %>
       <% end %>

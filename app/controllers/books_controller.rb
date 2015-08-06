@@ -1,19 +1,20 @@
 class BooksController < ApplicationController
   before_filter :find_book, only: :index
-  load_and_authorize_resource
   before_action :initialize_cart
+  after_filter :calculate_price, only: [:add_to_cart]
+  load_and_authorize_resource
   rescue_from ActiveRecord::RecordNotUnique, with: :record_not_unique
 
   def index
   end
 
   def show
-    @rating = Rating.number @book, current_user
-    @reviews = Rating.user_reviews @book
+    @rating = @book.number(current_user)
+    @reviews = @book.reviews
   end
 
   def add_to_cart
-    @cart.cart_items.create(book: @book, quantity: 1)
+    @cart.order_items.create(book: @book, quantity: 1)
     flash[:success] = 'Book "'<< @book.title << '" has added to cart'
     redirect_to(:back)
   end

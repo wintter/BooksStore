@@ -12,7 +12,7 @@
             <td>UNIT PRICE</td>
           </tr>
           </thead>
-          <% @items.each do |item| %>
+          <% @cart.order_items.each do |item| %>
               <tr class="text_align_center">
                 <td><%= link_to image_tag(item.book.cover, height: '70', width: '60') %></td>
                 <td><%= link_to item.book.title, item.book, class: 'color_black font_sie_14' %></td>
@@ -27,23 +27,33 @@
           <div class="col-md-6">
             <br/><span>Address information</span> <br/><span class="label label-success">Success</span>
             <div class="bs-callout bs-callout-info" id="callout-navs-tabs-plugin">
-              <% remove_key(session['order_address']).each do |key, value| %>
-                  <%= key %>: <span class="color_slider_top font_weight_600"><%= value %></span><hr>
-              <% end %>
+              Street address: <span class="color_slider_top font_weight_600"><%= @cart.address.street_address %></span><hr>
+              City: <span class="color_slider_top font_weight_600"><%= @cart.address.city %></span><hr>
+              Phone: <span class="color_slider_top font_weight_600"><%= @cart.address.phone %></span><hr>
+              Zip: <span class="color_slider_top font_weight_600"><%= @cart.address.zip %></span><hr>
             </div>
-            <div>Additional <%= session['order_delivery'] %>$ for delivery</div><br/>
+            <div>Additional <%= @cart.delivery.price %>$ for delivery - <%= @cart.delivery.title %></div><br/>
           </div>
           <div class="col-md-6">
             <br/><span>Credit Card information</span> <br/><span class="label label-success">Success</span>
             <div class="bs-callout bs-callout-info" id="callout-navs-tabs-plugin">
-              <% remove_key(session['order_creditcard']).each do |key, value| %>
-                  <%= key %>: <span class="color_slider_top font_weight_600"><%= value %></span><hr>
-              <% end %>
+              Number: <span class="color_slider_top font_weight_600"><%= @cart.credit_card.number %></span><hr>
+              CVV: <span class="color_slider_top font_weight_600"><%= @cart.credit_card.CVV %></span><hr>
+              First name: <span class="color_slider_top font_weight_600"><%= @cart.credit_card.first_name %></span><hr>
+              Last name: <span class="color_slider_top font_weight_600"><%= @cart.credit_card.last_name %></span><hr>
             </div>
           </div>
         </div>
+
+        <%= render 'shared/flash_success' %>
+
+        <%= form_tag({ controller: :orders, action: :coupon }, method: :get, class: 'font_opensans form_register') do %>
+            <%= text_field_tag(:coupon, nil, placeholder: 'Enter coupon code') %>
+            <%= submit_tag 'Use coupon code' %>
+        <% end %>
+
         <div class="text_align_center">
-        Total price: <span class="color_slider_top font_weight_600 font_size_25"><%= @total_price %>$</span><br/>
+        Total price: <span class="color_slider_top font_weight_600 font_size_25"><%= @cart.total_price %>$</span><br/>
         <br/><br/>
           <%= link_to 'Create order', orders_path, method: :post, class: 'link_order' %>
           <br/><br/><br/>

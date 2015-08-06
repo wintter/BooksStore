@@ -15,7 +15,7 @@ class Admin::CategoriesController < ApplicationController
 
   def create
     if @category.save
-      flash_and_redirect(@catogory, 'create')
+      flash_and_redirect(@category, 'create')
     else
       render 'new'
     end
@@ -23,7 +23,7 @@ class Admin::CategoriesController < ApplicationController
 
   def update
     if @category.update_attributes(category_params)
-      flash_and_redirect(@catogory, 'update')
+      flash_and_redirect(@category, 'update')
     else
       render 'edit'
     end

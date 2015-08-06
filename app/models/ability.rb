@@ -10,9 +10,9 @@ class Ability
        else
          can [:index, :show, :add_to_cart, :add_to_wish_list], Book
          can :create, Rating, user: user
-         can :manage, CartItem, cart: user.cart
+         can :manage, OrderItem, order: Order.cart(user)
          can :manage, WishList, user: user
-         can [:index, :show, :create, :update], Order, user: user
+         can [:index, :show, :create, :update, :coupon], Order, user: user
        end
     #
     # The first argument to `can` is the action you are giving the user

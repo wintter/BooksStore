@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="col-md-2">
-      <%= link_to raw('<i class="glyphicon glyphicon-shopping-cart shop_cart"></i>'), cart_items_path %>
+      <%= link_to raw('<i class="glyphicon glyphicon-shopping-cart shop_cart"></i>'), order_items_path %>
     </div>
   </div>
 </div>
@@ -51,7 +51,7 @@
           </ul>
         </li>
         <% end %>
-        <li><%= link_to "Shopping cart", cart_items_path %></li>
+        <li><%= link_to "Shopping cart", order_items_path %></li>
         <li><%= link_to "Wish list", wish_lists_path if user_signed_in? %></li>
         <li><%= link_to "My orders", orders_path %></li>
       </ul>

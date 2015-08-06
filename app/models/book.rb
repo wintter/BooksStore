@@ -4,10 +4,9 @@
   has_many :ratings
   has_many :wish_lists
 
-  #has_and_belongs_to_many :users
   validates :title, :description, :price, :in_stock, presence: true
   mount_uploader :cover, CoverUploader
-  skip_callback :commit, :after, :remove_previously_stored_avatar
+  skip_callback :commit, :after, :remove_previously_stored_cover
 
   scope :by_text, ->(text) { where("title LIKE '%#{text}%'") }
 
@@ -22,6 +21,15 @@
       end
     end
 
+  end
+
+  def number(user)
+    @rating = ratings.find_by(user: user)
+    @rating ? @rating.rating_number : 0
+  end
+
+  def reviews
+    ratings.where(book: self, approve: true)
   end
 
 end

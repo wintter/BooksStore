@@ -5,18 +5,12 @@ class Admin::OrdersController < ApplicationController
   include Admin::AdminHelper
 
   def index
-    @states = OrderState.all
+    @orders = @orders.valid_orders
   end
 
   def update
-    @order.update_attributes(order_params)
+    params[:cancel] ? (@order.cancel!) : (@order.next_state)
     flash_and_redirect(@order, nil)
   end
-
-  private
-
-    def order_params
-      params.require(:order).permit(:order_state_id)
-    end
 
 end

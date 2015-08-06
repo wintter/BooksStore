@@ -1,33 +1,52 @@
 class Order < ActiveRecord::Base
+  include AASM
+
   belongs_to :user
   belongs_to :credit_card
-  belongs_to :order_state
+  belongs_to :delivery
   belongs_to :address
+  belongs_to :coupon
   has_many :order_items
 
-  before_validation do
-    self.order_state ||= OrderState.in_progress
-  end
+  #scope only for cancan ability
+  scope :cart, ->(user) { find_by(user: user, state: 'in_progress') }
 
-  def create_order(user, address, credit_cards, delivery, cart)
-    self.total_price = Order.get_total_price(user, delivery)
-    self.create_credit_card(credit_cards)
-    self.create_address(address)
-    self.user = user
-    self.save
+  scope :valid_orders, -> { where.not(state: 'in_progress').where.not(state: 'canceled') }
 
-    cart.cart_items.each do |item|
-      OrderItem.create(quantity: item.quantity, book: item.book, order: self)
+  aasm column: 'state' do
+    state :in_progress, initial: true
+    state :in_queue
+    state :in_delivery
+    state :delivered, after_enter: :send_email
+    state :canceled
+
+    event :checkout do
+      transitions from: :in_progress, to: :in_queue
+    end
+
+    event :confirm do
+      transitions from: :in_queue, to: :in_delivery
+    end
+
+    event :finish do
+      transitions from: :in_delivery, to: :delivered
+    end
+
+    event :cancel do
+      transitions from: [:in_queue, :in_delivery, :delivered], to: :canceled
     end
   end
 
-  class << self
-
-    def get_total_price(user, delivery)
-      items_price = user.cart.cart_items.map { |item| item.quantity*item.book.price }
-      items_price.inject(&:+) + delivery.to_i || 0
+  def next_state
+    if aasm.current_state.eql? :in_queue
+      self.confirm!
+    elsif aasm.current_state.eql? :in_delivery
+      self.finish!
     end
+  end
 
+  def send_email
+    OrderMailer.order_delivered(self.user).deliver_now
   end
 
 end

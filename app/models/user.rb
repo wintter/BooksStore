@@ -7,13 +7,7 @@ class User < ActiveRecord::Base
 
   has_many :orders
   has_many :ratings
-  has_one :cart
   has_many :wish_lists
-
-  #has_and_belongs_to_many :books
-  #has_one :address
-  #has_many :credit_cards
-  #accepts_nested_attributes_for :credit_cards, :address
 
   before_save { self.email = email.downcase }
 

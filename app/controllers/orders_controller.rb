@@ -1,33 +1,32 @@
 class OrdersController < ApplicationController
   load_and_authorize_resource only: :index
   authorize_resource
-  include Wicked::Wizard
+  before_action :initialize_cart
+  include Wicked::Wizard, OrderChecker
+  after_filter :calculate_price, only: [:coupon]
   steps :order_address, :order_delivery, :order_payment, :order_confirm
   layout 'layouts/order', except: :index
 
   def index
+    @orders = @orders.valid_orders
   end
 
   def show
     case step
       when :order_address
-        @address = Address.new
+        @address ||= @cart.address || Address.new
       when :order_delivery
+        @delivery = Delivery.all
       when :order_payment
-         @credit_card = CreditCard.new
+        @credit_card ||= @cart.credit_card || CreditCard.new
       else
-        @items = cart_items
-        @total_price = Order.get_total_price(current_user, session[:order_delivery])
+        return check_previous_step
     end
     render_wizard
   end
 
   def create
-    @cart = current_user.cart
-    @order = Order.new
-    @order.create_order(current_user, session['order_address'],
-                        session['order_creditcard'], session['order_delivery'], @cart)
-    @cart.cart_items.destroy_all
+    @cart.checkout!
     flash[:success] = 'Your order has successfully created'
     redirect_to root_path
   end
@@ -37,14 +36,28 @@ class OrdersController < ApplicationController
         when :order_address
           @check = check_valid_request(Address, order_address_params)
         when :order_delivery
-          session['order_delivery'] = params[:delivery]
-          @check = true if order_delivery_params
+          @check = change_delivery(order_delivery_params)
         when :order_payment
           @check = check_valid_request(CreditCard, order_credit_cards_params)
         else
         create
       end
       @check ? (redirect_to next_wizard_path) : (render_wizard)
+  end
+
+  def coupon
+    @coupon = Coupon.find_by(number: params[:coupon])
+    if @coupon
+      if @cart.coupon
+        flash[:error] = 'You already use coupon code'
+      else
+        @cart.update(coupon: @coupon)
+        flash.now[:success] = 'Coupon code has been accepted'
+      end
+    else
+      flash[:error] = 'Coupon not found'
+    end
+    redirect_to(:back)
   end
 
   private
@@ -58,8 +71,7 @@ class OrdersController < ApplicationController
     end
 
     def order_delivery_params
-      delivery = %w'5 10 15'
-      true if delivery.include? session['order_delivery']
+      params[:delivery] if Delivery.find_by_id(params[:delivery])
     end
 
 end

@@ -7,7 +7,7 @@ module BookHelper
   end
 
   def already_in_cart(book)
-    @item = CartItem.where(book: book, cart: @cart).first
+    @item = OrderItem.find_by(book: book, order: @cart)
     if @item
       content_tag(:span, 'In cart', class: 'pull-right font_weight_600 label label-warning font_size_14')
     else
