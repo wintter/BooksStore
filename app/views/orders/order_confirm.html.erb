@@ -27,10 +27,16 @@
           <div class="col-md-6">
             <br/><span>Address information</span> <br/><span class="label label-success">Success</span>
             <div class="bs-callout bs-callout-info" id="callout-navs-tabs-plugin">
-              Street address: <span class="color_slider_top font_weight_600"><%= @cart.address.street_address %></span><hr>
-              City: <span class="color_slider_top font_weight_600"><%= @cart.address.city %></span><hr>
-              Phone: <span class="color_slider_top font_weight_600"><%= @cart.address.phone %></span><hr>
-              Zip: <span class="color_slider_top font_weight_600"><%= @cart.address.zip %></span><hr>
+
+              Billing address: <span class="color_slider_top font_weight_600"><%= @cart.billing_address.street_address %></span><hr>
+              City: <span class="color_slider_top font_weight_600"><%= @cart.billing_address.city %></span><hr>
+              Phone: <span class="color_slider_top font_weight_600"><%= @cart.billing_address.phone %></span><hr>
+              Zip: <span class="color_slider_top font_weight_600"><%= @cart.billing_address.zip %></span><hr>
+
+              Shipping address: <span class="color_slider_top font_weight_600"><%= @cart.billing_address.street_address %></span><hr>
+              City: <span class="color_slider_top font_weight_600"><%= @cart.billing_address.city %></span><hr>
+              Phone: <span class="color_slider_top font_weight_600"><%= @cart.billing_address.phone %></span><hr>
+              Zip: <span class="color_slider_top font_weight_600"><%= @cart.billing_address.zip %></span><hr>
             </div>
             <div>Additional <%= @cart.delivery.price %>$ for delivery - <%= @cart.delivery.title %></div><br/>
           </div>

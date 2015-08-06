@@ -6,7 +6,7 @@
       <%= form_for @credit_card, url: wizard_path, method: :patch, html: {class: 'font_opensans form_register'} do |f| %>
           <div class="font_opensans text_align_center font_weight_600">Fill credit card informtion</div><br/>
 
-          <%= render 'shared/error_order', entity: @credit_card %>
+          <%= render partial: 'shared/error_order', locals:{ entity: [@credit_card] } %>
 
           <%= f.text_field :number, placeholder: 'Number' %>
           <%= f.text_field :CVV, placeholder: 'CVV' %>
