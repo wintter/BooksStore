@@ -32,6 +32,7 @@ gem 'devise'
 gem 'carrierwave'
 gem 'wicked'
 gem 'carrierwave-dropbox'
+gem 'aasm'
 
 group :development do
   gem 'sqlite3'
@@ -52,6 +53,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'shoulda-matchers'
   gem 'awesome_print'
+  gem 'selenium-webdriver'
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
 
