@@ -29,10 +29,14 @@ feature 'Order pages' do
     scenario 'User continue shopping and click continue' do
       find('.link_order').click
 
-      expect(page).to have_field('address[street_address]')
-      expect(page).to have_field('address[city]')
-      expect(page).to have_field('address[phone]')
-      expect(page).to have_field('address[zip]')
+      expect(page).to have_field('billing_address[street_address]')
+      expect(page).to have_field('billing_address[city]')
+      expect(page).to have_field('billing_address[phone]')
+      expect(page).to have_field('billing_address[zip]')
+      expect(page).to have_field('shipping_address[street_address]')
+      expect(page).to have_field('shipping_address[city]')
+      expect(page).to have_field('shipping_address[phone]')
+      expect(page).to have_field('shipping_address[zip]')
     end
 
     scenario 'User fill in address fields and moved to the next step' do

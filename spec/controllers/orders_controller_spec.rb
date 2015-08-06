@@ -39,8 +39,12 @@ RSpec.describe OrdersController, type: :controller do
         expect(response).to render_template('order_address')
       end
 
-      it 'create @address' do
-        expect(assigns(:address)).to be_instance_of Address
+      it 'create @billing_address' do
+        expect(assigns(:billing_address)).to be_instance_of Address
+      end
+
+      it 'create @shipping_address' do
+        expect(assigns(:shipping_address)).to be_instance_of Address
       end
 
     end
@@ -78,20 +82,21 @@ RSpec.describe OrdersController, type: :controller do
       end
 
       it 'redirect_to delivery if delivery does not exist' do
-        cart.update(address: FactoryGirl.create(:address))
+        cart.update(billing_address: FactoryGirl.create(:address), shipping_address: FactoryGirl.create(:address))
         get :show, id: :order_confirm
         expect(response).to redirect_to(action: :show, id: :order_delivery)
       end
 
       it 'redirect_to credit_card if credit_card does not exist' do
-        cart.update(address: FactoryGirl.create(:address), delivery: FactoryGirl.create(:delivery))
+        cart.update(billing_address: FactoryGirl.create(:address), shipping_address: FactoryGirl.create(:address),
+                    delivery: FactoryGirl.create(:delivery))
         get :show, id: :order_confirm
         expect(response).to redirect_to(action: :show, id: :order_payment)
       end
 
       it 'render confirm template' do
-        cart.update(address: FactoryGirl.create(:address), delivery: FactoryGirl.create(:delivery),
-                    credit_card: FactoryGirl.create(:credit_card))
+        cart.update(billing_address: FactoryGirl.create(:address), shipping_address: FactoryGirl.create(:address),
+                    delivery: FactoryGirl.create(:delivery), credit_card: FactoryGirl.create(:credit_card))
         get :show, id: :order_confirm
         expect(response).to render_template('order_confirm')
       end
@@ -102,8 +107,8 @@ RSpec.describe OrdersController, type: :controller do
 
   describe 'POST #create' do
     before do
-      cart.update(address: FactoryGirl.create(:address), delivery: FactoryGirl.create(:delivery),
-                  credit_card: FactoryGirl.create(:credit_card))
+      cart.update(billing_address: FactoryGirl.create(:address), shipping_address: FactoryGirl.create(:address),
+                  delivery: FactoryGirl.create(:delivery), credit_card: FactoryGirl.create(:credit_card))
       post :create
     end
 
@@ -128,16 +133,17 @@ RSpec.describe OrdersController, type: :controller do
   describe 'PATCH #update' do
 
     context 'first_step' do
-      let(:address) { FactoryGirl.attributes_for(:address) }
+      let(:billing_address) { FactoryGirl.attributes_for(:address) }
+      let(:shipping_address) { FactoryGirl.attributes_for(:address) }
       let(:invalid_address) { FactoryGirl.attributes_for(:address, street_address: '') }
 
-      it 'call #check_valid_request' do
-        expect(controller).to receive(:check_valid_request).with(Address, address)
-        patch :update, id: :order_address, address: address
+      it 'call #create_address' do
+        expect(controller).to receive(:create_addresses).with(billing_address, shipping_address)
+        patch :update, id: :order_address, billing_address: billing_address, shipping_address: shipping_address
       end
 
       describe 'valid form' do
-        before { patch :update, id: :order_address, address: address }
+        before { patch :update, id: :order_address, billing_address: billing_address, shipping_address: shipping_address }
 
         it 'redirect to next step' do
           expect(response).to redirect_to(action: 'show', id: :order_delivery)
@@ -146,14 +152,14 @@ RSpec.describe OrdersController, type: :controller do
       end
 
       describe 'invalid form' do
-        before { patch :update, id: :order_address, address: invalid_address }
+        before { patch :update, id: :order_address, billing_address: billing_address, shipping_address: invalid_address }
 
         it 'not redirect if errors' do
           expect(response).to render_template(:order_address)
         end
 
         it 'address entity has errors' do
-          expect(assigns(:address).errors).not_to be_nil
+          expect(assigns(:shipping_address).errors).not_to be_nil
         end
       end
 
@@ -165,7 +171,7 @@ RSpec.describe OrdersController, type: :controller do
         before { patch :update, id: :order_delivery, delivery: FactoryGirl.create(:delivery) }
 
         it 'call #order_delivery_params' do
-          expect(controller).to receive(:change_delivery)
+          expect(controller).to receive(:create_delivery)
           patch :update, id: :order_delivery, delivery: FactoryGirl.create(:delivery)
         end
 
@@ -191,7 +197,7 @@ RSpec.describe OrdersController, type: :controller do
       let(:invalid_credit_card) { FactoryGirl.attributes_for(:credit_card, CVV: '') }
 
       it 'call #check_valid_request' do
-        expect(controller).to receive(:check_valid_request).with(CreditCard, credit_card)
+        expect(controller).to receive(:create_credit_card).with(credit_card)
         patch :update, id: :order_payment, credit_card: credit_card
       end
 
@@ -220,8 +226,8 @@ RSpec.describe OrdersController, type: :controller do
 
     context 'firth step' do
       before do
-        cart.update(address: FactoryGirl.create(:address), delivery: FactoryGirl.create(:delivery),
-                    credit_card: FactoryGirl.create(:credit_card))
+        cart.update(billing_address: FactoryGirl.create(:address), shipping_address: FactoryGirl.create(:address),
+                    delivery: FactoryGirl.create(:delivery), credit_card: FactoryGirl.create(:credit_card))
       end
       after { patch :update, id: :order_confirm }
 

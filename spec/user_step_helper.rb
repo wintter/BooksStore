@@ -1,10 +1,15 @@
 module UserStepHelper
 
   def fill_address
-    fill_in 'address[street_address]', with: 'test'
-    fill_in 'address[city]', with: 'test'
-    fill_in 'address[phone]', with: '123456'
-    fill_in 'address[zip]', with: '123'
+    fill_in 'billing_address[street_address]', with: 'test'
+    fill_in 'billing_address[city]', with: 'test'
+    fill_in 'billing_address[phone]', with: '123456'
+    fill_in 'billing_address[zip]', with: '123'
+
+    fill_in 'shipping_address[street_address]', with: 'test'
+    fill_in 'shipping_address[city]', with: 'test'
+    fill_in 'shipping_address[phone]', with: '123456'
+    fill_in 'shipping_address[zip]', with: '123'
   end
 
   def fill_credit_card
