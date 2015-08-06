@@ -1,5 +1,5 @@
 class DropCartItemsTable < ActiveRecord::Migration
   def change
-    drop_table :order_items
+    drop_table :cart_items
   end
 end
