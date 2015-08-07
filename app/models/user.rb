@@ -26,4 +26,8 @@ class User < ActiveRecord::Base
 
   end
 
+  def cart
+    orders.find_by(state: 'in_progress')
+  end
+
 end

@@ -9,9 +9,6 @@ class Order < ActiveRecord::Base
   belongs_to :coupon
   has_many :order_items
 
-  #scope only for cancan ability
-  scope :cart, ->(user) { find_by(user: user, state: 'in_progress') }
-
   scope :valid_orders, -> { where.not(state: 'in_progress').where.not(state: 'canceled') }
 
   aasm column: 'state' do

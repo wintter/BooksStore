@@ -10,7 +10,7 @@ class Ability
        else
          can [:index, :show, :add_to_cart, :add_to_wish_list], Book
          can :create, Rating, user: user
-         can :manage, OrderItem, order: Order.cart(user)
+         can :manage, OrderItem, order: user.cart
          can :manage, WishList, user: user
          can [:index, :show, :create, :update, :coupon], Order, user: user
        end
