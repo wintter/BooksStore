@@ -16,6 +16,8 @@ class ApplicationController < ActionController::Base
 
     def configure_permitted_parameters
       devise_parameter_sanitizer.for(:sign_up) << :name
+      devise_parameter_sanitizer.for(:account_update) << [billing_address_attributes: [:id, :city, :zip, :street_address, :phone],
+                                                          shipping_address_attributes: [:id, :city, :zip, :street_address, :phone]]
     end
 
 end

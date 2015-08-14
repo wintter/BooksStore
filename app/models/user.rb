@@ -8,6 +8,9 @@ class User < ActiveRecord::Base
   has_many :orders
   has_many :ratings
   has_many :wish_lists
+  belongs_to :billing_address, class_name: :Address
+  belongs_to :shipping_address, class_name: :Address
+  accepts_nested_attributes_for :billing_address, :shipping_address
 
   before_save { self.email = email.downcase }
 

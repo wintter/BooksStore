@@ -1,11 +1,13 @@
 <div class="col-md-12">
+  <div class="text_align_center font_opensans font_size_25">Account information</div>
   <div class="row">
-    <div class="col-md-4 col-md-offset-4">
-      <h2>Edit <%= resource_name.to_s.humanize %></h2>
+
+    <div class="col-md-4 col-md-offset-1">
 
       <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {class: 'font_opensans form_register', method: :put}) do |f| %>
           <%= devise_error_messages! %>
-
+          Personal info:
+          <hr/>
           <div class="field">
             <%= f.label :email %><br/>
             <%= f.email_field :email, autofocus: true %>
@@ -29,17 +31,35 @@
             <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br/>
             <%= f.password_field :current_password, autocomplete: "off" %>
           </div>
-
-          <div class="actions">
-            <%= f.submit "Update", class: "btn btn-large btn-register" %>
           </div>
+          <div class="col-md-3 font_opensans form_register">
+            <% generate_addresses %>
+            Billing address:
+            <hr/>
+            <%= f.fields_for :billing_address do |b_address| %>
+                <%= render partial: 'shared/address_form', locals: {f: b_address} %>
+            <% end %>
+          </div>
+          <div class="col-md-3 font_opensans form_register">
+
+            Shipping address:
+            <hr/>
+            <%= f.fields_for :shipping_address do |s_address| %>
+                <%= render partial: 'shared/address_form', locals: {f: s_address} %>
+            <% end %>
+          </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+              <div class="actions">
+                <%= f.submit "Update", class: "btn btn-large btn-register" %>
+              </div>
       <% end %>
 
       <h3>Cancel my account</h3>
 
       <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: {confirm: "Are you sure?"}, method: :delete %></p>
-
       <%= link_to "Back", :back %>
-    </div>
-  </div>
-</div>
+      </div>
+      </div>
+      </div>

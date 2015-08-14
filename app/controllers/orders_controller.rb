@@ -14,8 +14,8 @@ class OrdersController < ApplicationController
   def show
     case step
       when :order_address
-        @billing_address ||= @cart.billing_address || Address.new
-        @shipping_address ||= @cart.shipping_address || Address.new
+        @billing_address ||= @cart.billing_address || current_user.billing_address || Address.new
+        @shipping_address ||= @cart.shipping_address || current_user.shipping_address || Address.new
       when :order_delivery
         @delivery = Delivery.all
       when :order_payment

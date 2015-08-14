@@ -1,4 +1,10 @@
 module DeviseHelper
+
+  def generate_addresses
+    current_user.build_billing_address unless current_user.billing_address
+    current_user.build_shipping_address unless current_user.shipping_address
+  end
+
   def devise_error_messages!
     return "" if resource.errors.empty?
 
