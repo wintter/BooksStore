@@ -1,3 +1,15 @@
 // Place all the styles related to the Carts controller here.
 // They will automatically be included in application.css.scss.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.total_price {
+  font-size: 20px;
+  line-height: 65px;
+  font-weight: 100;
+  position: absolute;
+  left: 70px;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: #89ca18;
+  color: #fff;
+}
