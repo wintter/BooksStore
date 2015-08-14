@@ -4,12 +4,8 @@ class RatingsController < ApplicationController
 
   def create
     @rating.update_attributes(rating_params)
-    if params[:rating_number]
-      render json: 1
-    else
-      flash[:success] = 'Your review has been accepted for moderation'
-      redirect_to book_path(id: params[:book_id])
-    end
+    flash[:success] = 'Your review has been accepted for moderation'
+    redirect_to book_path(id: params[:book_id])
   end
 
   private
