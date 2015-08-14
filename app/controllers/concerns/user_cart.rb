@@ -1,11 +1,12 @@
 module UserCart
 
   def initialize_cart
-    @cart = Order.find_or_create_by(user: current_user, state: 'in_progress')
+    @cart = current_user.cart
   end
 
   def calculate_price
-    price = @cart.order_items.map { |item| item.quantity*item.book.price }.inject(&:+)
+    return @cart.update(total_price: nil) unless @cart.order_items
+    price = Book.where(id: @cart.order_items.pluck(:book_id)).sum(:price)
     @cart.coupon ? (discount = @cart.coupon.discount.to_d) : (discount = 0)
     @cart.update(total_price: price - discount)
   end
