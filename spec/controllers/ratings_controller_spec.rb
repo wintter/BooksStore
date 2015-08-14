@@ -37,11 +37,6 @@ RSpec.describe RatingsController, type: :controller do
       expect(response).to redirect_to book_path(book.id)
     end
 
-    it 'return json if number' do
-      post :create, book_id: book.id, user_id: user.id, rating_number: 10
-      expect(ActiveSupport::JSON.decode(response.body)).not_to be_nil
-    end
-
   end
 
 end
