@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   end
 
   def cart
-    orders.find_by(state: 'in_progress')
+    orders.find_or_create_by(state: 'in_progress')
   end
 
 end
