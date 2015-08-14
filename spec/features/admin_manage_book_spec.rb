@@ -1,6 +1,6 @@
 feature 'Admin panel' do
-  let!(:book) { FactoryGirl.create(:book) }
-  let(:user) { FactoryGirl.create(:user, admin: true) }
+  given!(:book) { FactoryGirl.create(:book) }
+  given(:user) { FactoryGirl.create(:user, admin: true) }
   before { login_as user, :scope => :user }
 
   feature 'from main page' do
@@ -23,12 +23,7 @@ feature 'Admin panel' do
     scenario 'Admin want create a new book' do
       click_link('Add new book')
 
-      expect(page).to have_field('book[title]')
-      expect(page).to have_field('book[description]')
-      expect(page).to have_field('book[price]')
-      expect(page).to have_field('book[in_stock]')
-      expect(page).to have_field('book[category_id]')
-      expect(page).to have_field('book[author_id]')
+      expect(page).to have_content('Add new book')
       expect(page).to have_button('Create a book')
     end
 
@@ -47,12 +42,7 @@ feature 'Admin panel' do
     scenario 'Admin want edit book' do
       click_link('Edit')
 
-      expect(page).to have_field('book[title]')
-      expect(page).to have_field('book[description]')
-      expect(page).to have_field('book[price]')
-      expect(page).to have_field('book[in_stock]')
-      expect(page).to have_field('book[category_id]')
-      expect(page).to have_field('book[author_id]')
+      expect(page).to have_content('Edit book')
       expect(page).to have_button('Update books')
     end
 

@@ -1,6 +1,6 @@
 feature 'Admin panel' do
-  let!(:rating) { FactoryGirl.create(:rating, approve: false) }
-  let(:user) { FactoryGirl.create(:user, admin: true) }
+  given!(:rating) { FactoryGirl.create(:rating, approve: false) }
+  given(:user) { FactoryGirl.create(:user, admin: true) }
   before { login_as user, :scope => :user }
 
   feature 'from main page' do

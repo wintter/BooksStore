@@ -1,6 +1,6 @@
 feature 'Login' do
 
-  let(:user) { FactoryGirl.create(:user) }
+  given(:user) { FactoryGirl.create(:user) }
 
   before { visit new_user_session_path }
 

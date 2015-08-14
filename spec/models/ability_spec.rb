@@ -5,6 +5,9 @@ RSpec.describe Ability, type: :model do
   describe 'abilities for not login user' do
 
     let(:user) { FactoryGirl.create(:user) }
+    let(:another_user) { FactoryGirl.create(:user) }
+    let(:order) { FactoryGirl.create(:order, user: user) }
+
     subject { Ability.new(user) }
 
     context 'Book ability' do
@@ -16,10 +19,14 @@ RSpec.describe Ability, type: :model do
 
     context 'Rating ability' do
       it { expect(subject).to be_able_to(:create, Rating.new(user: user)) }
+
+      it { expect(subject).not_to be_able_to(:create, Rating.new(user: another_user)) }
     end
 
     context 'WishList ability' do
       it { expect(subject).to be_able_to(:manage, WishList.new(user: user)) }
+
+      it { expect(subject).not_to be_able_to(:manage, WishList.new(user: another_user)) }
     end
 
     context 'Order ability' do
@@ -27,6 +34,17 @@ RSpec.describe Ability, type: :model do
       it { expect(subject).to be_able_to(:show, Order.new(user: user)) }
       it { expect(subject).to be_able_to(:create, Order.new(user: user)) }
       it { expect(subject).to be_able_to(:update, Order.new(user: user)) }
+      it { expect(subject).to be_able_to(:coupon, Order.new(user: user)) }
+
+      it { expect(subject).not_to be_able_to(:index, Order.new(user: another_user)) }
+      it { expect(subject).not_to be_able_to(:show, Order.new(user: another_user)) }
+      it { expect(subject).not_to be_able_to(:create, Order.new(user: another_user)) }
+      it { expect(subject).not_to be_able_to(:update, Order.new(user: another_user)) }
+      it { expect(subject).not_to be_able_to(:coupon, Order.new(user: another_user)) }
+    end
+
+    context 'OrderItem ability' do
+      it { expect(subject).to be_able_to(:manage, OrderItem.new(order: user.cart)) }
     end
 
   end

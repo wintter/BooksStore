@@ -28,14 +28,18 @@ RSpec.describe BooksController, type: :controller do
 
   describe 'GET #index' do
 
+    it 'use before_filter find_book' do
+      expect(controller).to receive(:find_book)
+      get :index
+    end
+
     it '#paginate if no params' do
       expect(Book).to receive(:paginate)
       get :index
     end
 
     it 'call #search if search params' do
-      allow(Book).to receive_message_chain(:search, :paginate)
-      expect(Book).to receive(:search)
+      expect(Book).to receive_message_chain(:search, :paginate)
       get :index, search: book.title, type: '1'
     end
 
@@ -53,17 +57,17 @@ RSpec.describe BooksController, type: :controller do
       expect(assigns(:book)).not_to be_nil
     end
 
-    it '#get_rate' do
+    it 'load @rating' do
       expect(assigns(:rating)).not_to be_nil
-    end
-
-    it '#get_review' do
-      expect(assigns(:book)).to receive(:reviews)
-      get :show, id: book.id
     end
 
     it '#reviews' do
       expect(assigns(:book)).to receive(:reviews)
+      get :show, id: book.id
+    end
+
+    it '#number with user' do
+      expect(assigns(:book)).to receive(:number).with(user)
       get :show, id: book.id
     end
 

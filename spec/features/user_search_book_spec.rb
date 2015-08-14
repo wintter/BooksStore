@@ -1,7 +1,7 @@
 feature 'Home pages' do
 
-  let(:book) { FactoryGirl.create(:book, author: FactoryGirl.create(:author)) }
-  let(:user) { FactoryGirl.create(:user) }
+  given!(:book) { FactoryGirl.create(:book, author: FactoryGirl.create(:author)) }
+  given(:user) { FactoryGirl.create(:user) }
 
   before do
     login_as user, :scope => :user

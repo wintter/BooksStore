@@ -1,9 +1,9 @@
 feature 'Order pages' do
 
-  let(:user) { FactoryGirl.create(:user) }
-  let!(:book) { FactoryGirl.create(:book) }
-  let(:order_item) { OrderItem.first }
-  let!(:delivery) { FactoryGirl.create(:delivery) }
+  given(:user) { FactoryGirl.create(:user) }
+  given!(:book) { FactoryGirl.create(:book) }
+  given(:order_item) { OrderItem.first }
+  given!(:delivery) { FactoryGirl.create(:delivery) }
 
   before do
     login_as user, :scope => :user
@@ -22,21 +22,24 @@ feature 'Order pages' do
       expect(page).to have_content order_item.book.title
       expect(page).to have_content order_item.quantity
       expect(page).to have_content order_item.book.price
-      expect(page).to have_content 'Save and continue'
 
     end
 
     scenario 'User continue shopping and click continue' do
       find('.link_order').click
 
-      expect(page).to have_field('billing_address[street_address]')
-      expect(page).to have_field('billing_address[city]')
-      expect(page).to have_field('billing_address[phone]')
-      expect(page).to have_field('billing_address[zip]')
-      expect(page).to have_field('shipping_address[street_address]')
-      expect(page).to have_field('shipping_address[city]')
-      expect(page).to have_field('shipping_address[phone]')
-      expect(page).to have_field('shipping_address[zip]')
+      expect(page).to have_content('Billing information')
+      expect(page).to have_content('Shipping information')
+      expect(page).to have_selector(:button , 'Save and continue')
+    end
+
+    scenario 'User see checkout when shopping' do
+      find('.link_order').click
+
+      expect(page).to have_selector(:link , 'ADDRESS')
+      expect(page).to have_selector(:link , 'DELIVERY')
+      expect(page).to have_selector(:link , 'PAYMENT')
+      expect(page).to have_selector(:link , 'CONFIRM')
     end
 
     scenario 'User fill in address fields and moved to the next step' do
@@ -55,12 +58,8 @@ feature 'Order pages' do
       choose('delivery_1')
       click_button('Save and continue')
 
-      expect(page).to have_field('credit_card[number]')
-      expect(page).to have_field('credit_card[CVV]')
-      expect(page).to have_field('credit_card[first_name]')
-      expect(page).to have_field('credit_card[last_name]')
-      expect(page).to have_field('credit_card[expiration_month]')
-      expect(page).to have_field('credit_card[expiration_year]')
+      expect(page).to have_content('Fill credit card informtion')
+      expect(page).to have_selector(:button , 'Save and continue')
     end
 
     scenario 'User passed all step and want to create order' do

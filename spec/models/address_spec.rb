@@ -12,6 +12,4 @@ RSpec.describe Address, type: :model do
   it { expect(subject.phone).to match(/\d/) }
   it { expect(subject.zip).to match(/\d/) }
 
-  it { expect(subject).to have_one :order }
-
 end

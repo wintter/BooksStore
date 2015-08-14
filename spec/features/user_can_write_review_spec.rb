@@ -1,6 +1,6 @@
 feature 'User on book page' do
-  let(:book) { FactoryGirl.create(:book) }
-  let(:user) { FactoryGirl.create(:user) }
+  given!(:book) { FactoryGirl.create(:book) }
+  given(:user) { FactoryGirl.create(:user) }
 
   before do
     login_as user, :scope => :user

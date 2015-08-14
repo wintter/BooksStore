@@ -6,6 +6,8 @@ RSpec.describe User, type: :model do
 
     it { expect(subject).to validate_presence_of(:name) }
     it { expect(subject).to validate_presence_of(:email) }
+    it { expect(subject).to accept_nested_attributes_for(:billing_address) }
+    it { expect(subject).to accept_nested_attributes_for(:shipping_address) }
 
     it { expect(subject).to have_many :ratings }
     it { expect(subject).to have_many :orders }

@@ -14,6 +14,10 @@ RSpec.describe Book, type: :model do
   it { expect(subject).to belong_to :author }
   it { expect(subject).to belong_to :category }
 
+  context 'scope by_text' do
+    it { expect(Book.by_text(subject.title)).to match_array subject }
+  end
+
   context '.search' do
 
     it 'find with by_text scope' do
