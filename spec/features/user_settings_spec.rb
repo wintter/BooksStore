@@ -20,7 +20,8 @@ feature 'Login' do
 
   scenario 'Visitor login failure via register form' do
 
-    click_button('Update')
+    fill_in 'user[current_password]', with: ''
+    find_button('Update').click
 
     expect(page).to have_content 'Current password can\'t be blank'
   end

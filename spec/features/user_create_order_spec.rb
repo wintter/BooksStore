@@ -43,7 +43,7 @@ feature 'Order pages' do
     end
 
     scenario 'User fill in address fields and moved to the next step' do
-      visit order_path(:order_address)
+      visit order_step_path(:order_address)
 
       fill_address
       click_button('Save and continue')
@@ -53,7 +53,7 @@ feature 'Order pages' do
     end
 
     scenario 'User change delivery and moved to the next step' do
-      visit order_path(:order_delivery)
+      visit order_step_path(:order_delivery)
 
       choose('delivery_1')
       click_button('Save and continue')
@@ -63,7 +63,7 @@ feature 'Order pages' do
     end
 
     scenario 'User passed all step and want to create order' do
-      visit order_path(:order_address)
+      visit order_step_path(:order_address)
 
       fill_address
       click_button('Save and continue')
@@ -81,7 +81,7 @@ feature 'Order pages' do
     end
 
     scenario 'User create order' do
-      visit order_path(:order_address)
+      visit order_step_path(:order_address)
 
       fill_address
       click_button('Save and continue')
