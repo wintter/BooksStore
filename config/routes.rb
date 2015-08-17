@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   #routes app
   resources :books, only: [:index, :show]
   resources :order_items, only: [:index, :update, :destroy]
-  resources :orders, only: [:index, :show, :create, :update, ]
+  resources :orders, only: [:index, :create ]
+  resources :order_steps, only: [:show, :update ]
   resources :wish_lists, only: [:index, :destroy]
   resources :ratings, only: [:create]
 
@@ -68,7 +69,7 @@ Rails.application.routes.draw do
   #   end
 
   # Example resource route with concerns:
-  #   concern :toggleable do
+  #   concerns :toggleable do
   #     post 'toggle'
   #   end
   #   resources :posts, concerns: :toggleable
