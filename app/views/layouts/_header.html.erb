@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="col-md-2">
-      <span class="total_price"><%= current_user.cart.total_price %>$</span>
+      <span class="total_price"><%= current_user.cart.total_price if user_signed_in? %>$</span>
       <%= link_to raw('<i class="glyphicon glyphicon-shopping-cart shop_cart"></i>'), order_items_path %>
     </div>
   </div>
