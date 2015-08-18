@@ -22,7 +22,7 @@ class OrdersController < ApplicationController
         flash[:error] = 'You already use coupon code'
       else
         @cart.update(coupon: @coupon)
-        flash.now[:success] = 'Coupon code has been accepted'
+        flash[:success] = 'Coupon code has been accepted'
       end
     else
       flash[:error] = 'Coupon not found'
