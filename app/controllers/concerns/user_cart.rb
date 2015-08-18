@@ -5,10 +5,9 @@ module UserCart
   end
 
   def calculate_price
-    return @cart.update(total_price: nil) unless @cart.order_items
+    return @cart.update(total_price: nil) if @cart.order_items.empty?
     price = @cart.order_items.map { |item| item.quantity*item.book.price }.inject(&:+)
-    @cart.coupon ? (discount = @cart.coupon.discount.to_d) : (discount = 0)
-    @cart.update(total_price: price - discount)
+    @cart.update(total_price: price - @cart.discount)
   end
 
 end

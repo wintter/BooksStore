@@ -35,6 +35,10 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def discount
+    coupon ? coupon.discount.to_d : 0
+  end
+
   def next_state
     if aasm.current_state.eql? :in_queue
       self.confirm!
