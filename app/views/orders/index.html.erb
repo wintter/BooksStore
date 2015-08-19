@@ -18,7 +18,7 @@
               <div class="col-md-9">
                 <% item.order_items.each do |order_items| %>
                     <div class="row">
-                      <%= link_to image_tag(order_items.book.cover, height: '70', width: '60') %>
+                      <%= cl_image_tag(order_items.book.cover, height: '70', width: '60') %>
                       <%= link_to order_items.book.title, order_items.book, class: 'color_black font_sie_14' %> /
                       <span class="color_slider_top font_weight_900">$<%= order_items.book.price %></span> /
                       quanity: <%= order_items.quantity %>

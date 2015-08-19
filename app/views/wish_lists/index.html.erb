@@ -7,7 +7,7 @@
     <% @wish_lists.each do |wish| %>
         <div class="row container_profile font_size_17">
           <div class="col-md-11">
-            <%= link_to image_tag(wish.book.cover, height: '70', width: '60') %>
+            <%= cl_image_tag(wish.book.cover, height: '70', width: '60') %>
             <%= link_to wish.book.title, wish.book, class: 'color_black font_sie_14' %> /
             <span class="color_slider_top font_weight_900">$<%= wish.book.price %></span>
           </div>
