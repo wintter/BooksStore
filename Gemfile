@@ -33,6 +33,7 @@ gem 'carrierwave'
 gem 'wicked'
 gem 'carrierwave-dropbox'
 gem 'aasm'
+gem 'figaro'
 
 group :development do
   gem 'sqlite3'
