@@ -20,4 +20,8 @@ class ApplicationController < ActionController::Base
                                                           shipping_address_attributes: [:id, :city, :zip, :street_address, :phone]]
     end
 
+    def after_sign_out_path_for(resource_or_scope)
+      root_path
+    end
+
 end

@@ -1,22 +1,25 @@
 <div class="col-md-8 col-md-offset-2">
   <div class="row">
     <%= form_tag wizard_path, method: :patch, class: 'font_opensans form_register' do %>
-        <%= render partial: 'shared/error_order', locals:{ entity: [@billing_address, @shipping_address] }  %>
+        <%= render partial: 'shared/error_order', locals:{ entity: [@form.billing_address, @form.shipping_address] }  %>
         <div class="col-md-5 col-md-offset-1">
           <div class="font_opensans font_size_17 text_align_center">Billing information</div>
           <br/>
-          <%= fields_for :billing_address, @billing_address do |f| %>
+          <%= fields_for :billing_address, @form.billing_address do |f| %>
               <%= render partial: 'shared/address_form', locals: {f: f} %>
           <% end %>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-5 shipping_address">
           <div class="font_opensans font_size_17 text_align_center">Shipping information</div>
           <br/>
-          <%= fields_for :shipping_address, @shipping_address do |f| %>
+          <%= fields_for :shipping_address, @form.shipping_address do |f| %>
               <%= render partial: 'shared/address_form', locals: {f: f} %>
           <% end %>
         </div>
+        <div class="row"><div class="col-md-4 col-md-offset-4">
+          Use billing address<%= check_box('shipping', 'check') %></div>
+          </div>
         <%= submit_tag 'Save and continue', class: 'btn btn-register' %>
     <% end %>
   </div>

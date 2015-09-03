@@ -30,3 +30,10 @@ $(document).on('submit', '.rating_form', function(event) {
         alert('Write a review');
     }
 });
+$(document).on('click', '#shipping_check', function() {
+   if($('.shipping_address').hasClass('hide')) {
+       $('.shipping_address').removeClass('hide');
+   } else {
+       $('.shipping_address').addClass('hide');
+   }
+});

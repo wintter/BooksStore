@@ -21,7 +21,7 @@
 <div class="col-md-12">
   <div class="row header-store">
     <div class="col-md-2 col-md-offset-1 font_size_17 font_opensans font_bold color_white padding_top_30 border_cat cursor_pointer category_name"
-         data-toggle="dropdown" id="dLabel2">Categories
+         data-toggle="dropdown" id="dLabel2"><%= t('menu.categories') %>
       <i class="glyphicon glyphicon-menu-hamburger font_size_20 padding_left_15 pull-right"> </i></div>
 
     <% if params[:controller] == 'books' && params[:action] == 'index' %>
@@ -35,20 +35,20 @@
        <div class="col-md-6">
       <ul class="font_opensans color_white ul_header">
         <% if user_signed_in? %>
-            <li><%= link_to 'My account', '#', id: 'dLabel', class: 'li_header_acc', :'data-toggle' => 'dropdown' %>
+            <li><%= link_to t('menu.my_account'), '#', id: 'dLabel', class: 'li_header_acc', :'data-toggle' => 'dropdown' %>
               <span class="caret"></span>
               <ul class="dropdown-menu" aria-labelledby="dLabel" style="margin-left:150px;color:black;">
-                <%= link_to "Settings", edit_user_registration_path(current_user), id: 'user_settings' %><br/>
-                <%= link_to "Logout", destroy_user_session_path(current_user), id:'logout', method: :delete %>
+                <%= link_to t('menu.settings'), edit_user_registration_path(current_user), id: 'user_settings' %><br/>
+                <%= link_to t('menu.logout'), destroy_user_session_path(current_user), id:'logout', method: :delete %>
               </ul>
             </li>
         <% else %>
         <li><%= link_to 'My account', '#', id: 'dLabel', class: 'li_header_acc', :'data-toggle' => 'dropdown' %>
           <span class="caret"></span>
           <ul class="dropdown-menu" aria-labelledby="dLabel" style="margin-left:150px;color:black;">
-            <%= link_to "Register", new_user_registration_path %><br/>
-            <%= link_to "Login", new_user_session_path %><br/>
-            <%= link_to "Login with Facebook", user_omniauth_authorize_path(:facebook) %>
+            <%= link_to t('menu.register'), new_user_registration_path %><br/>
+            <%= link_to t('menu.login'), new_user_session_path %><br/>
+            <%= link_to t('menu.login_with_facebook'), user_omniauth_authorize_path(:facebook) %>
           </ul>
         </li>
         <% end %>

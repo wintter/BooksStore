@@ -68,11 +68,12 @@ namespace :db_populate do
     end
   end
 
-  task :order_states => :environment do
-    possible_states = ['in progress', 'in queue', 'in delivery', 'delivered', 'canceled']
-    5.times do |i|
-      name_state = possible_states[i]
-      OrderState.create!(state: name_state)
+  task :rename_image_book => :environment do
+    image_name = ['img_book1_zowoif.png', 'img_book10_rqzgve.png', 'img_book5_j9unov.png', 'img_book3_bzecyj.png',
+    'img_book2_cytysl.png', 'img_book8_foqy3j.png', 'img_book6_cozgtv.png', 'img_book7_zpacfa.png',
+    'img_book9_vqr6r8.png', 'img_book4_vpknyh.png']
+    Book.all.each do |book|
+      book.update!(cover: 'img_book1_zowoif.png')
     end
   end
 

@@ -9,6 +9,8 @@ class Order < ActiveRecord::Base
   belongs_to :coupon
   has_many :order_items
 
+  validates_associated :billing_address, :shipping_address, :credit_card, :delivery
+
   scope :valid_orders, -> { where.not(state: 'in_progress').where.not(state: 'canceled') }
 
   aasm column: 'state' do

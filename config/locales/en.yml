@@ -20,4 +20,13 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  menu:
+    categories: Categories
+    my_account: My account
+    settings: Settings
+    logout: Logout
+    register: Register
+    login: Login
+    login_with_facebook: Login with Facebook
+    shopping_cart: Shopping cart
+    my_orders: My orders

@@ -5,9 +5,9 @@
           <div class="font_opensans font_size_20 text_align_center">Delivery</div>
           <%= render 'shared/error_delivery' %>
           <br/>
-          <% @delivery.each do |delivery| %>
+          <% @form.delivery.each do |delivery| %>
               <%= label_tag(:price_title, delivery.title) %>
-              <%= radio_button_tag('delivery', delivery.id, delivery == @cart.delivery) %>
+              <%= radio_button_tag('delivery[id]', delivery.id, delivery == @cart.delivery) %>
           <% end %>
           <%= submit_tag 'Save and continue', class: "btn btn-large btn-register" %>
       <% end %>
