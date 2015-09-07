@@ -1,8 +1,6 @@
 class OrdersController < ApplicationController
   load_and_authorize_resource only: :index
-  authorize_resource
-  before_action :initialize_cart
-  after_filter :calculate_price, only: [:coupon]
+  include UserCart::InitCart, UserCart::CalcPrice
   layout 'layouts/order', except: :index
 
   def index

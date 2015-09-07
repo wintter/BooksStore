@@ -15,48 +15,6 @@ RSpec.describe OrderStepsController, type: :controller do
 
   describe 'GET #show' do
 
-    context 'first_step' do
-      before { get :show, id: :order_address }
-
-      it 'render order_address template' do
-        expect(response).to render_template('order_address')
-      end
-
-      it 'create @billing_address' do
-        expect(assigns(:billing_address)).to be_instance_of Address
-      end
-
-      it 'create @shipping_address' do
-        expect(assigns(:shipping_address)).to be_instance_of Address
-      end
-
-    end
-
-    context 'second_step' do
-      before { get :show, id: :order_delivery }
-
-      it 'render order_delivery template' do
-        expect(response).to render_template('order_delivery')
-      end
-
-      it 'create @delivery' do
-        expect(assigns(:delivery)).to eq Delivery.all
-      end
-
-    end
-
-    context 'third_step' do
-      before { get :show, id: :order_payment }
-
-      it 'render order_payment template' do
-        expect(response).to render_template('order_payment')
-      end
-
-      it 'create @credit_card' do
-        expect(assigns(:credit_card)).to be_instance_of CreditCard
-      end
-    end
-
     context 'fourth_step' do
 
       it 'redirect to address if address does not exist' do
@@ -91,109 +49,29 @@ RSpec.describe OrderStepsController, type: :controller do
 
   describe 'PATCH #update' do
 
-    context 'first_step' do
-      let(:billing_address) { FactoryGirl.attributes_for(:address) }
-      let(:shipping_address) { FactoryGirl.attributes_for(:address) }
-      let(:invalid_address) { FactoryGirl.attributes_for(:address, street_address: '') }
-
-      it 'call #create_address' do
-        expect(controller).to receive(:create_addresses).with(billing_address, shipping_address)
-        patch :update, id: :order_address, billing_address: billing_address, shipping_address: shipping_address
-      end
-
-      describe 'valid form' do
-        before { patch :update, id: :order_address, billing_address: billing_address, shipping_address: shipping_address }
-
-        it 'redirect to next step' do
-          expect(response).to redirect_to(action: 'show', id: :order_delivery)
-        end
-
-      end
-
-      describe 'invalid form' do
-        before { patch :update, id: :order_address, billing_address: billing_address, shipping_address: invalid_address }
-
-        it 'not redirect if errors' do
-          expect(response).to render_template(:order_address)
-        end
-
-        it 'address entity has errors' do
-          expect(assigns(:shipping_address).errors).not_to be_nil
-        end
-      end
-
+    before do
+      @params = { id: :order_address, billing_address: FactoryGirl.attributes_for(:address),
+                  shipping_address: FactoryGirl.attributes_for(:address) }
+      patch :update, id: :order_address
     end
 
-    context 'second step' do
-
-      describe 'valid form' do
-        before { patch :update, id: :order_delivery, delivery: FactoryGirl.create(:delivery) }
-
-        it 'call #order_delivery_params' do
-          expect(controller).to receive(:create_delivery)
-          patch :update, id: :order_delivery, delivery: FactoryGirl.create(:delivery)
-        end
-
-        it 'redirect to next step' do
-          expect(response).to redirect_to(action: :show, id: :order_payment)
-        end
-
-      end
-
-      describe 'invalid form' do
-        before { patch :update, id: :order_delivery, delivery: nil }
-
-        it 'not redirect if errors' do
-          expect(response).to render_template(:order_delivery)
-        end
-
-      end
-
+    it 'build order' do
+      expect(assigns(:form)).not_to be_nil
     end
 
-    context 'third step' do
-      let(:credit_card) { FactoryGirl.attributes_for(:credit_card) }
-      let(:invalid_credit_card) { FactoryGirl.attributes_for(:credit_card, CVV: '') }
-
-      it 'call #check_valid_request' do
-        expect(controller).to receive(:create_credit_card).with(credit_card)
-        patch :update, id: :order_payment, credit_card: credit_card
-      end
-
-      describe 'valid form' do
-        before { patch :update, id: :order_payment, credit_card: credit_card }
-
-        it 'redirect to next step' do
-          expect(response).to redirect_to(action: :show, id: :order_confirm)
-        end
-
-      end
-
-      describe 'invalid form' do
-        before { patch :update, id: :order_payment, credit_card: invalid_credit_card }
-
-        it 'not redirect if errors' do
-          expect(response).to render_template(:order_payment)
-        end
-
-        it 'address entity has errors' do
-          expect(assigns(:credit_card).errors).not_to be_nil
-        end
-      end
-
+    it 'update order with step and params' do
+      expect(assigns(:form)).to receive(:update)
+      patch :update, @params
     end
 
-    context 'firth step' do
-      before do
-        cart.update(billing_address: FactoryGirl.create(:address), shipping_address: FactoryGirl.create(:address),
-                    delivery: FactoryGirl.create(:delivery), credit_card: FactoryGirl.create(:credit_card))
-      end
-      after { patch :update, id: :order_confirm }
+    it 'next step if order save' do
+      expect(response).to redirect_to(action: :show, id: :order_delivery)
+    end
 
-      it '#create' do
-        expect(controller).to receive(:create)
-      end
-
+    it 'render current step if order not save' do
+      @params[:billing_address][:street_address] = nil
+      patch :update, @params
+      expect(response).to render_template('order_address')
     end
 
   end

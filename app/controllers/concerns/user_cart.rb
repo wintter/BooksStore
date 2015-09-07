@@ -1,13 +1,27 @@
 module UserCart
 
-  def initialize_cart
-    @cart = current_user.cart
+  module InitCart
+    extend ActiveSupport::Concern
+
+    included { before_action :initialize_cart }
+
+    def initialize_cart
+      @cart = current_user.cart
+    end
+
   end
 
-  def calculate_price
-    return @cart.update(total_price: nil) if @cart.order_items.empty?
-    price = @cart.order_items.map { |item| item.quantity*item.book.price }.inject(&:+)
-    @cart.update(total_price: price - @cart.discount)
+  module CalcPrice
+    extend ActiveSupport::Concern
+
+    included { after_filter :calculate_price, only: [:add_to_cart, :update, :destroy, :coupon] }
+
+    def calculate_price
+      current_user.cart.calculate_total_price
+    end
+
   end
+
+
 
 end

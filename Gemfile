@@ -35,6 +35,7 @@ gem 'carrierwave-dropbox'
 gem 'aasm'
 gem 'figaro'
 gem 'cloudinary'
+gem 'draper'
 
 group :development do
   gem 'sqlite3'

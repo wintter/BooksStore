@@ -1,6 +1,5 @@
 class OrderItemsController < ApplicationController
-  before_action :initialize_cart
-  after_filter :calculate_price, only: [:update, :destroy]
+  include UserCart::InitCart, UserCart::CalcPrice
   load_and_authorize_resource
 
   def index

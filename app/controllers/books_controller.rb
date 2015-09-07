@@ -1,7 +1,6 @@
 class BooksController < ApplicationController
   before_filter :find_book, only: :index
-  before_action :initialize_cart
-  after_filter :calculate_price, only: [:add_to_cart]
+  include UserCart::InitCart, UserCart::CalcPrice
   load_and_authorize_resource
   rescue_from ActiveRecord::RecordNotUnique, with: :record_not_unique
 
@@ -9,6 +8,7 @@ class BooksController < ApplicationController
   end
 
   def show
+    @book = @book.decorate
     @rating = @book.number(current_user)
     @reviews = @book.reviews
   end

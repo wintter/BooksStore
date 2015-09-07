@@ -1,6 +1,5 @@
 class OrderForm
   include ActiveModel::Model
-  attr_accessor :billing_address, :shipping_address, :delivery, :credit_card
 
   def initialize(order)
     @order = order
@@ -24,8 +23,8 @@ class OrderForm
 
   def create_addresses(billing, shipping)
     if @order.billing_address && @order.shipping_address
-      @order.billing_address.update(billing)
-      @order.shipping_address.update(shipping)
+      @order.billing_address.assign_attributes(billing)
+      @order.shipping_address.assign_attributes(shipping)
     else
       @order.create_billing_address(billing)
       @order.create_shipping_address(shipping)
@@ -34,7 +33,7 @@ class OrderForm
 
   def create_credit_card(credit_card)
     if @order.credit_card
-      @order.credit_card.update(credit_card)
+      @order.credit_card.assign_attributes(credit_card)
     else
       @order.create_credit_card(credit_card)
     end
@@ -66,4 +65,6 @@ class OrderForm
           @order.create
       end
   end
+
+
 end

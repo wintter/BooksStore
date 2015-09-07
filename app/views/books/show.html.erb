@@ -13,19 +13,18 @@
       <span class="color_slider_top font_size_20 font_weight_900">$<%= @book.price %></span><br/>
       <hr>
       Available: <%= @book.in_stock %><br/>
-      Category of book: <%= @book.category.title %><br/><br/>
-      Author of book: <%= @book.author.firstname %> <%= @book.author.lastname %><br/>
+      Category of book: <%= @book.category_name %><br/><br/>
+      Author of book: <%= @book.author_name %><br/>
       Number of pages: <%= @book.count_pages %><br/>
-      Publication date: <%= @book.publication_date.strftime("%d %B %Y") %>
+      Publication date: <%= @book.public_date %>
       <br/><br/>
 
       <div class="row">
         <div class="col-md-8">
-          <%= already_in_cart @book %>
+          <%= @book.in_cart %>
         </div>
         <div class="col-md-4">
-          <%= already_in_wish_list @book %>
-
+          <%= @book.in_wish_list %>
         </div>
       </div>
 

@@ -1,7 +1,6 @@
 class OrderStepsController < ApplicationController
-  before_action :initialize_cart
+  include UserCart::InitCart
   before_action :build_order
-  authorize_resource :order
   include Wicked::Wizard, OrderChecker
   steps :order_address, :order_delivery, :order_payment, :order_confirm
   layout 'layouts/order'

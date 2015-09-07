@@ -11,7 +11,7 @@
         <div class="text_align_center"><%= link_to book.title, book_path(book), class: 'font_opensans color_book_index font_weight_600' %></div>
         <hr>
         <span class="font_opensans color_slider_top font_size_20 font_weight_900"> $<%= book.price %></span>
-        <%= already_in_cart book %>
+        <%= book.decorate.in_cart %>
       </div>
   <% end %>
 </div>

@@ -2,10 +2,10 @@ class Order < ActiveRecord::Base
   include AASM
 
   belongs_to :user
-  belongs_to :credit_card
-  belongs_to :delivery
-  belongs_to :billing_address, class_name: :Address
-  belongs_to :shipping_address, class_name: :Address
+  belongs_to :credit_card, autosave: true
+  belongs_to :delivery, autosave: true
+  belongs_to :billing_address, class_name: :Address, autosave: true
+  belongs_to :shipping_address, class_name: :Address, autosave: true
   belongs_to :coupon
   has_many :order_items
 
@@ -51,6 +51,12 @@ class Order < ActiveRecord::Base
 
   def send_email
     OrderMailer.order_delivered(self.user).deliver_now
+  end
+
+  def calculate_total_price
+    return self.update(total_price: nil) if self.order_items.empty?
+    price = self.order_items.map { |item| item.quantity*item.book.price }.inject(&:+)
+    self.update(total_price: price - self.discount)
   end
 
 end
