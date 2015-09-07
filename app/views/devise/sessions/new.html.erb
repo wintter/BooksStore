@@ -26,7 +26,12 @@
           <div class="actions">
             <%= f.submit "Log in", class: "btn btn-large btn-register" %>
           </div>
-      <% end %>
+          <br/>
+
+          <%= link_to raw('login<span> with facebook</span>') , user_omniauth_authorize_path(:facebook), class: 'btnf fb' %>
+
+    <% end %>
+
 
       <%= render "devise/shared/links" %>
 
