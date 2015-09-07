@@ -56,6 +56,7 @@ class OrderForm
   def update(step, params)
       case step
         when :order_address
+          params[:shipping_address] = params[:billing_address] if params[:shipping][:check].eql? '1'
           create_addresses(params[:billing_address], params[:shipping_address])
         when :order_delivery
           create_delivery(params[:delivery])

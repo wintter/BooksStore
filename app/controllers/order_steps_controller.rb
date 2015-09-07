@@ -21,7 +21,8 @@ class OrderStepsController < ApplicationController
       params.permit(shipping_address: [:street_address, :zip, :city, :phone],
                     billing_address:  [:street_address, :zip, :city, :phone],
                     credit_card:      [:number, :CVV, :expiration_month, :expiration_year, :first_name, :last_name],
-                    delivery: [:id])
+                    delivery: [:id],
+                    shipping: [:check])
     end
 
     def build_order
